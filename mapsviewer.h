@@ -3,11 +3,13 @@
 
 #include <QWidget>
 #include <QPen>
+#include <QDebug>
 
 struct RSSI{
     /* RSSI,Received signal strength indication */
     QString SSID;
     float SS;       //signal strength
+    int index;
 };
 
 struct WAP{
@@ -22,6 +24,12 @@ struct Target{
     QString SSID;
     RSSI rssi;
     QPoint currentPosition;
+};
+
+struct COLOR{
+    int R;
+    int G;
+    int B;
 };
 
 namespace Ui {
@@ -42,9 +50,22 @@ protected:
 
 private:
     Ui::MapsViewer *ui;
+
+    //螢幕
+    float rate;
+    float Woutset;
+    float Houtset;
+    QPen pen;
+
+    //Color
+    COLOR *color;
+
+    //value
     QVector<WAP> waps;
     Target target;
-    QPen pen;
+
+
+
 };
 
 #endif // MAPSVIEWER_H
