@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     mapsviewer.cpp
 
 HEADERS  += mainwindow.h \
-    mapsviewer.h
+    mapsviewer.h \
+    global.h
 
 FORMS    += mainwindow.ui \
     mapsviewer.ui
