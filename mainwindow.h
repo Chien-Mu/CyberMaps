@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
 #include "mapsviewer.h"
+#include "cyberglobal.h"
 
 namespace Ui {
 class MainWindow;
