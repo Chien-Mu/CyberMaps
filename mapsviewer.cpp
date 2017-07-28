@@ -8,6 +8,7 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     ui->setupUi(this);
 
     //ui
+    connect(ui->btn_sw_style,SIGNAL(clicked()),this,SLOT(btn_sw_style_Click()));
     connect(ui->btn_sw_dD,SIGNAL(clicked()),this,SLOT(btn_sw_dD_Click()));
 
     rate = 0.75; //長寬限制
@@ -16,6 +17,23 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     this->style = 0;
     this->isSetting = false;
     this->isVDist = false;
+}
+
+void MapsViewer::btn_sw_style_Click(){
+    int index = (int)estyle;
+    if(index == 2)
+        index = 0;
+    else
+        index++;
+    estyle = eStyle(index);
+
+    if(index == 0)
+        ui->la_sw_style->setText("NoStyle");
+    else if(index == 1)
+        ui->la_sw_style->setText("Dense");
+    else if(index ==2)
+        ui->la_sw_style->setText("Gradient");
+    this->repaint();
 }
 
 void MapsViewer::btn_sw_dD_Click(){
@@ -93,20 +111,26 @@ void MapsViewer::paintEvent(QPaintEvent *event){
             //draw RSSI
             for(int k=0;k<waps[i].ant[j].rssis.size();k++){
                 index = waps[i].ant[j].rssis[k].SSID_index;
-                /*//漸層
-                QRadialGradient gradient(QPoint(waps[i].wapXY.x(), waps[i].wapXY.y()),
-                                         (int)waps[i].ant[j].rssis[k].dBm,
-                                         QPoint(waps[i].wapXY.x(), waps[i].wapXY.y()));
-                gradient.setColorAt(0, QColor::fromRgbF(style[index].R/255.0,
-                                                        style[index].G/255.0,
-                                                        style[index].B/255.0,
-                                                        0.5));
-                gradient.setColorAt(1, QColor::fromRgbF(0, 0, 0, 0));
-                painter.setBrush(gradient);*/
-                /*//Style
-                painter.setBrush(QBrush(QColor(style[index].R,style[index].G,style[index].B),
-                                        style[index].bStyle));*/
-                painter.setBrush(Qt::NoBrush); //啟動樣式此行要註解
+
+                if(estyle == Gradient){
+                    //漸層
+                    QRadialGradient gradient(QPoint(waps[i].wapXY.x(), waps[i].wapXY.y()),
+                                             (int)waps[i].ant[j].rssis[k].dBm,
+                                             QPoint(waps[i].wapXY.x(), waps[i].wapXY.y()));
+                    gradient.setColorAt(0, QColor::fromRgbF(style[index].R/255.0,
+                                                            style[index].G/255.0,
+                                                            style[index].B/255.0,
+                                                            0.5));
+                    gradient.setColorAt(1, QColor::fromRgbF(0, 0, 0, 0));
+                    painter.setBrush(gradient);
+                }else if(estyle == Dense){
+                    //濃密
+                    painter.setBrush(QBrush(QColor(style[index].R,style[index].G,style[index].B),
+                                            style[index].bStyle));
+                }else if(estyle == NoStyle){
+                    painter.setBrush(Qt::NoBrush);
+                }
+
                 pen.setBrush(QColor(style[index].R,style[index].G,style[index].B));
                 pen.setWidth(1);
                 painter.setPen(pen);

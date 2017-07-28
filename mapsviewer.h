@@ -45,6 +45,12 @@ struct vStyle{
     Qt::BrushStyle bStyle;
 };
 
+enum eStyle{
+    NoStyle,
+    Dense,
+    Gradient
+};
+
 namespace Ui {
 class MapsViewer;
 }
@@ -75,12 +81,14 @@ private:
 
     //Style
     vStyle *style;
+    volatile eStyle estyle;
 
     //value
     QVector<vWAP> waps;
 
 private slots:
     void btn_sw_dD_Click();
+    void btn_sw_style_Click();
 };
 
 #endif // MAPSVIEWER_H
