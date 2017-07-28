@@ -37,10 +37,11 @@ struct vWAP{
     QPoint wapXY;
 };
 
-struct COLOR{
+struct vStyle{
     int R;
     int G;
     int B;
+    Qt::BrushStyle bStyle;
 };
 
 namespace Ui {
@@ -69,8 +70,8 @@ private:
     QPen pen;
     volatile bool isSetting;
 
-    //Color
-    COLOR *color;
+    //Style
+    vStyle *style;
 
     //value
     QVector<vWAP> waps;
