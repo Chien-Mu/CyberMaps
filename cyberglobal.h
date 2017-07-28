@@ -1,5 +1,5 @@
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#ifndef CYBERGLOBAL_H
+#define CYBERGLOBAL_H
 
 #define SSID_SIZE 100
 typedef char (*SSID_ptr)[SSID_SIZE];
@@ -35,4 +35,9 @@ struct WAP{
     int wapY;
 };
 
-#endif // GLOBAL_H
+/// dst 空間要與 src 一樣
+void cloneWAP(WAP *src, unsigned src_size,
+              WAP *dst, SSID_ptr dst_ssid, Antenna *dst_ant, RSSI *dst_rssi);
+
+
+#endif // CYBERGLOBAL_H

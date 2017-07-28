@@ -5,6 +5,40 @@
 #include <QPen>
 #include <QDebug>
 
+#include "cyberglobal.h"
+
+
+/* RSSI,Received signal strength indication */
+struct vRSSI{
+    QString SSID;                   //Source device ID
+    unsigned SSID_index;            //Source device tag
+    float dBm;                      //Received signal strength
+    float distance;
+};
+
+struct vLaunch{
+    float dBm;                      //wifi signal strength
+    float distance;
+};
+
+struct vAntenna{
+    unsigned rssis_size;
+    QVector<vRSSI> rssis;
+    int antX;
+    int antY;
+    vLaunch lau;
+};
+
+/* WAP,Wireless Access Point */
+struct vWAP{
+    QString SSID;                  //ID
+    unsigned index;                //tag
+    unsigned antenna_size;
+    QVector<vAntenna> ant;
+    int wapX;
+    int wapY;
+};
+
 struct COLOR{
     int R;
     int G;
@@ -22,7 +56,7 @@ class MapsViewer : public QWidget
 public:
     explicit MapsViewer(QWidget *parent = 0);
     ~MapsViewer();
-    //void drawWAPs(QVector<WAP> waps);
+    void drawWAPs(WAP *waps, const unsigned waps_size);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -40,10 +74,7 @@ private:
     COLOR *color;
 
     //value
-    //QVector<WAP> waps;
-
-
-
+    QVector<vWAP> waps;
 };
 
 #endif // MAPSVIEWER_H

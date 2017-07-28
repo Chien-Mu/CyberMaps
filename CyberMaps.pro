@@ -14,11 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    mapsviewer.cpp
+    mapsviewer.cpp \
+    cyberglobal.cpp
 
 HEADERS  += mainwindow.h \
     mapsviewer.h \
-    global.h
+    cyberglobal.h
 
 FORMS    += mainwindow.ui \
     mapsviewer.ui
