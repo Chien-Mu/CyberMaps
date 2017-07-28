@@ -24,8 +24,7 @@ struct vLaunch{
 struct vAntenna{
     unsigned rssis_size;
     QVector<vRSSI> rssis;
-    int antX;
-    int antY;
+    QPoint antXY;
     vLaunch lau;
 };
 
@@ -35,8 +34,7 @@ struct vWAP{
     unsigned index;                //tag
     unsigned antenna_size;
     QVector<vAntenna> ant;
-    int wapX;
-    int wapY;
+    QPoint wapXY;
 };
 
 struct COLOR{
@@ -69,6 +67,7 @@ private:
     float Woutset;
     float Houtset;
     QPen pen;
+    volatile bool isSetting;
 
     //Color
     COLOR *color;
