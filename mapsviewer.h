@@ -2,6 +2,7 @@
 #define MAPSVIEWER_H
 
 #include <QWidget>
+#include <QToolBar>
 #include <QPen>
 #include <QDebug>
 
@@ -61,6 +62,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    //ui
     Ui::MapsViewer *ui;
 
     //螢幕
@@ -69,12 +71,16 @@ private:
     float Houtset;
     QPen pen;
     volatile bool isSetting;
+    volatile bool isVDist;  //is view Distance
 
     //Style
     vStyle *style;
 
     //value
     QVector<vWAP> waps;
+
+private slots:
+    void btn_sw_dD_Click();
 };
 
 #endif // MAPSVIEWER_H
