@@ -75,15 +75,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ant[2].lau = lau;
     wap[2].ant = &ant[2];
 
+
+/*
     for(unsigned i=0;i<WAP_size;i++){
         qDebug() << "SSID:" << *wap[i].SSID;
         for(unsigned j=0;j<wap[i].ant[0].rssis_size;j++)
             qDebug() << "RSSI:" << *wap[i].ant[0].rssis[j].SSID << wap[i].ant[0].rssis[j].dBm;
     }
 
+*/
+
+    QString ip = "";
+    int delay = 0;
+
+    datareader = new dataReader;
+    datareader->get_datareader(wap, ip, delay);
+    datareader->test();
+    datareader->start();
+
 
     view = new MapsViewer;
-    view->drawWAPs(wap,WAP_size);
+    //view->drawWAPs(wap,WAP_size);
     //view->show();
 }
 
