@@ -72,12 +72,15 @@ private:
     Ui::MapsViewer *ui;
 
     //螢幕
-    float rate;
+    float screenRate;
     float Woutset;
     float Houtset;
+    float pixelRate;
+    float mag; //倍率
     QPen pen;
     volatile bool isSetting;
     volatile bool isVDist;  //is view Distance
+    volatile bool isLauch;
 
     //Style
     vStyle *style;
@@ -89,6 +92,8 @@ private:
 private slots:
     void btn_sw_dD_Click();
     void btn_sw_style_Click();
+    void changZoom(int value);
+    void btn_sw_LR_Click();
 };
 
 #endif // MAPSVIEWER_H
