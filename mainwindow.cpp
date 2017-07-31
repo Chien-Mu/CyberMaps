@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ant[0].lau = lau;
     wap[0].ant = ant;
 
-    wap[1].SSID = &ids[1];
+    wap[1].SSID = &ids[1];  //B
     wap[1].index = 1;
     wap[1].wapX = 150;
     wap[1].wapY = 150;
@@ -42,11 +42,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ant[1].antX = 150;
     ant[1].antY = 150;
     ant[1].rssis_size  = 2;
-    rssi[2].SSID = &ids[0];
+    rssi[2].SSID = &ids[0]; //A
     rssi[2].SSID_index = 0;
     rssi[2].dBm = 50;
     rssi[2].distance = 40;
-    rssi[3].SSID = &ids[2];
+    rssi[3].SSID = &ids[2]; //C
     rssi[3].SSID_index = 2;
     rssi[3].dBm = 50;
     rssi[3].distance = 40;
@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ant[1].lau = lau;
     wap[1].ant = &ant[1];
 
-    wap[2].SSID = &ids[2];
+    wap[2].SSID = &ids[2];  //C
     wap[2].index = 2;
     wap[2].wapX = 200;
     wap[2].wapY = 100;
@@ -62,11 +62,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ant[2].antX = 200;
     ant[2].antY = 100;
     ant[2].rssis_size  = 2;
-    rssi[4].SSID = &ids[0];
+    rssi[4].SSID = &ids[0]; //A
     rssi[4].SSID_index = 0;
     rssi[4].dBm = 100;
     rssi[4].distance = 90;
-    rssi[5].SSID = &ids[1];
+    rssi[5].SSID = &ids[1]; //B
     rssi[5].SSID_index = 1;
     rssi[5].dBm = 50;
     rssi[5].distance = 40;

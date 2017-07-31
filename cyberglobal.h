@@ -20,8 +20,8 @@ struct Launch{
 struct Antenna{
     unsigned rssis_size;
     RSSI *rssis;
-    int antX;
-    int antY;
+    float antX;
+    float antY;
     Launch lau;
 };
 
@@ -31,8 +31,8 @@ struct WAP{
     unsigned index;                 //tag
     unsigned antenna_size;
     Antenna *ant;
-    int wapX;
-    int wapY;
+    float wapX;
+    float wapY;
 };
 
 /// dst 空間要與 src 一樣
