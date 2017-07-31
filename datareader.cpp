@@ -1,4 +1,4 @@
-#include "datareader.h"
+﻿#include "datareader.h"
 
 dataReader::dataReader(QObject *parent) : QThread(parent)
 {

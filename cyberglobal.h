@@ -1,4 +1,4 @@
-#ifndef CYBERGLOBAL_H
+﻿#ifndef CYBERGLOBAL_H
 #define CYBERGLOBAL_H
 
 #define SSID_SIZE 100

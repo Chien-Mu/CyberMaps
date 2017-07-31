@@ -1,4 +1,4 @@
-#include "cyberglobal.h"
+﻿#include "cyberglobal.h"
 
 void cloneWAP(WAP *src, unsigned src_size,
               WAP *dst, SSID_ptr dst_ssid, Antenna *dst_ant, RSSI *dst_rssi){

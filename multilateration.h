@@ -1,4 +1,4 @@
-#ifndef MULTILATERATION_H
+﻿#ifndef MULTILATERATION_H
 #define MULTILATERATION_H
 
 #include "cyberglobal.h"

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
 
@@ -84,18 +84,18 @@ for(unsigned i=0;i<WAP_size;i++){
 
 */
 
-    QString ip = "";
-    int delay = 0;
+//    QString ip = "";
+//    int delay = 0;
 
-    datareader = new dataReader;
-    datareader->get_datareader(wap, ip, delay);
-    datareader->test();
-    datareader->start();
+//    datareader = new dataReader;
+//    datareader->get_datareader(wap, ip, delay);
+//    datareader->test();
+//    datareader->start();
 
 
     view = new MapsViewer;
-    //view->drawWAPs(wap,WAP_size);
-    //view->show();
+    view->drawWAPs(wap,WAP_size);
+    view->show();
 }
 
 MainWindow::~MainWindow()

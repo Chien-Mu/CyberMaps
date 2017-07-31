@@ -1,6 +1,5 @@
-#include "multilateration.h"
+﻿#include "multilateration.h"
 #include <math.h>
-#include <string.h>
 #include <stdio.h>
 #define PI 3.14159265359
 
@@ -44,8 +43,7 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
 
     if(numberOfDevice>=4)
     {
-        float gaussianMatrix[3][4];
-        memset(gaussianMatrix, 0, sizeof(gaussianMatrix));
+        float gaussianMatrix[3][4]={0.0f};
 
         float A=0.0, B=0.0, C=0.0;
         for(int i=3; i<(int)numberOfDevice; i++)
