@@ -2,6 +2,7 @@
 #define MAPSVIEWER_H
 
 #include <QWidget>
+#include <QToolBar>
 #include <QPen>
 #include <QDebug>
 
@@ -24,8 +25,7 @@ struct vLaunch{
 struct vAntenna{
     unsigned rssis_size;
     QVector<vRSSI> rssis;
-    int antX;
-    int antY;
+    QPoint antXY;
     vLaunch lau;
 };
 
@@ -35,14 +35,20 @@ struct vWAP{
     unsigned index;                //tag
     unsigned antenna_size;
     QVector<vAntenna> ant;
-    int wapX;
-    int wapY;
+    QPoint wapXY;
 };
 
-struct COLOR{
+struct vStyle{
     int R;
     int G;
     int B;
+    Qt::BrushStyle bStyle;
+};
+
+enum eStyle{
+    NoStyle,
+    Dense,
+    Gradient
 };
 
 namespace Ui {
@@ -62,19 +68,32 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    //ui
     Ui::MapsViewer *ui;
 
     //螢幕
-    float rate;
+    float screenRate;
     float Woutset;
     float Houtset;
+    float pixelRate;
+    float mag; //倍率
     QPen pen;
+    volatile bool isSetting;
+    volatile bool isVDist;  //is view Distance
+    volatile bool isLauch;
 
-    //Color
-    COLOR *color;
+    //Style
+    vStyle *style;
+    volatile eStyle estyle;
 
     //value
     QVector<vWAP> waps;
+
+private slots:
+    void btn_sw_dD_Click();
+    void btn_sw_style_Click();
+    void changZoom(int value);
+    void btn_sw_LR_Click();
 };
 
 #endif // MAPSVIEWER_H

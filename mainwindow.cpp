@@ -29,8 +29,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     rssi[1].dBm = 100;
     rssi[1].distance = 90;
     ant[0].rssis = rssi;
-    lau.dBm = 200;
-    lau.distance = 190;
+    lau.dBm = 50;
+    lau.distance = 40;
     ant[0].lau = lau;
     wap[0].ant = ant;
 
@@ -51,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     rssi[3].dBm = 50;
     rssi[3].distance = 40;
     ant[1].rssis = &rssi[2];
-    lau.dBm = 250;
     ant[1].lau = lau;
     wap[1].ant = &ant[1];
 
@@ -76,12 +75,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     wap[2].ant = &ant[2];
 
 
-/*
-    for(unsigned i=0;i<WAP_size;i++){
-        qDebug() << "SSID:" << *wap[i].SSID;
-        for(unsigned j=0;j<wap[i].ant[0].rssis_size;j++)
-            qDebug() << "RSSI:" << *wap[i].ant[0].rssis[j].SSID << wap[i].ant[0].rssis[j].dBm;
-    }
+    /*
+for(unsigned i=0;i<WAP_size;i++){
+    qDebug() << "SSID:" << *wap[i].SSID[0];
+    for(unsigned j=0;j<wap[i].ant[0].rssis_size;j++)
+        qDebug() << "RSSI:" << *wap[i].ant[0].rssis[j].SSID << wap[i].ant[0].rssis[j].dBm;
+}
 
 */
 
