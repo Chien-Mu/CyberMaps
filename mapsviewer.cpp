@@ -208,9 +208,9 @@ void MapsViewer::paintEvent(QPaintEvent *event){
         }
     }
 
+    //draw WAP(另外畫才不會被覆蓋)
     QString dD;
     for(int i=0;i<waps.size();i++){
-        //draw WAP(另外畫才不會被覆蓋)
         painter.setBrush(QBrush(QColor(style[i].R, style[i].G, style[i].B),Qt::SolidPattern));
         painter.setPen(Qt::NoPen);
         painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate),5,5);
@@ -235,6 +235,18 @@ void MapsViewer::paintEvent(QPaintEvent *event){
             }
         }
     }
+
+    //draw 比率尺
+    pen.setBrush(Qt::white);
+    pen.setWidth(1);
+    painter.setPen(pen);
+    int standard = (100.0*pixelRate) + 30;
+
+    painter.drawLine(30, this->height()-20, standard, this->height()-20);  //standard line
+    painter.drawLine(30, this->height()-20, 30, this->height()-30); //0
+    painter.drawLine(standard, this->height()-20,  standard, this->height()-30); //100
+    painter.drawText(30-3, this->height()-35,"0");
+    painter.drawText(standard - 10, this->height()-35,"100");
 }
 
 MapsViewer::~MapsViewer()
