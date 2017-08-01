@@ -76,7 +76,7 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
 
     if(numberOfDevice>=4)
     {
-        float gaussianMatrix[3][4]={0.0f};
+        float gaussianMatrix[3][4]={{0.0}};
 
         float A=0.0, B=0.0, C=0.0;
         float di0=0.0, di1=0.0, di2=0.0;

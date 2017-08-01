@@ -18,7 +18,7 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
 
 
     //畫面長寬限制
-    screenRate = 0.75;
+    screenRate = 0.3;
     Woutset = (this->width() - (this->width() * screenRate)) / 2.0; //此始點
     Houtset = (this->height() - (this->height() * screenRate)) / 2.0;
 
@@ -80,8 +80,9 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
     style = new vStyle[waps_size];
 
     //設定風格表
-    qsrand(6);
     unsigned j=8;
+    //qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+    qsrand(54867);
     for(int i=0;i<(int)waps_size;i++){
         style[i].R = qrand()%256;
         style[i].G = qrand()%256;
@@ -99,8 +100,8 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
     for(unsigned i=0;i<waps_size;i++){
         wap.SSID = waps[i].SSID[0];
         wap.index = waps[i].index;
-        wap.wapXY.setX((waps[i].wapX) + Woutset); //順面設定起始點
-        wap.wapXY.setY((waps[i].wapY) + Houtset);
+        wap.wapXY.setX((int)(waps[i].wapX) + Woutset); //順面設定起始點
+        wap.wapXY.setY((int)(waps[i].wapY) + Houtset);
         wap.antenna_size = waps[i].antenna_size;
         this->waps.push_back(wap);
         for(unsigned j=0;j<waps[i].antenna_size;j++){
@@ -226,9 +227,9 @@ void MapsViewer::paintEvent(QPaintEvent *event){
             for(int j=0;j<waps[i].ant.size();j++){
                 //顯示天線發射強度
                 if(isVDist)
-                    dD = QString::number(waps[i].ant[j].lau.distance) + " dist";
+                    dD = QString::number(waps[i].ant[j].lau.distance) + " M";
                 else
-                    dD = QString::number(waps[i].ant[j].lau.dBm) + " dBm";
+                    dD = QString::number(waps[i].ant[j].lau.dBm) + " -dBm";
 
                 painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate - 10,
                                         waps[i].wapXY.y()*pixelRate + 40 + (j*40)),dD);
@@ -246,7 +247,10 @@ void MapsViewer::paintEvent(QPaintEvent *event){
     painter.drawLine(30, this->height()-20, 30, this->height()-30); //0
     painter.drawLine(standard, this->height()-20,  standard, this->height()-30); //100
     painter.drawText(30-3, this->height()-35,"0");
-    painter.drawText(standard - 10, this->height()-35,"100");
+    if(isVDist)
+        painter.drawText(standard - 10, this->height()-35,"100(M)");
+    else
+        painter.drawText(standard - 10, this->height()-35,"100(-dBm)");
 }
 
 MapsViewer::~MapsViewer()
