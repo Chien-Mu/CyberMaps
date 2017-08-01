@@ -7,6 +7,7 @@
 #include "mapsviewer.h"
 #include "cyberglobal.h"
 #include "datareader.h"
+#include "multilateration.h"
 
 
 namespace Ui {
