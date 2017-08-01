@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     wap[1].antenna_size = 1;
     //ant[1].antX = 150;
     //ant[1].antY = 150;
-    ant[1].rssis_size  = 2;
+    ant[1].rssis_size  = 3;
     rssi[3].SSID = &ids[0]; //A
     rssi[3].SSID_index = 0;
     rssi[3].dBm = 50;
@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     wap[2].antenna_size = 1;
     //ant[2].antX = 200;
     //ant[2].antY = 100;
-    ant[2].rssis_size  = 2;
+    ant[2].rssis_size  = 3;
     rssi[6].SSID = &ids[0]; //A
     rssi[6].SSID_index = 0;
     rssi[6].dBm = 100;
@@ -95,7 +95,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     wap[3].antenna_size = 1;
     //ant[3].antX = 200;
     //ant[3].antY = 100;
-    ant[3].rssis_size  = 2;
+    ant[3].rssis_size  = 3;
     rssi[9].SSID = &ids[0]; //A
     rssi[9].SSID_index = 0;
     rssi[9].dBm = 100;
