@@ -1,4 +1,4 @@
-#ifndef MAPSVIEWER_H
+﻿#ifndef MAPSVIEWER_H
 #define MAPSVIEWER_H
 
 #include <QWidget>

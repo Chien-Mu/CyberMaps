@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -7,6 +7,7 @@
 #include "mapsviewer.h"
 #include "cyberglobal.h"
 #include "datareader.h"
+#include "multilateration.h"
 
 
 namespace Ui {

@@ -1,4 +1,4 @@
-#include "mapsviewer.h"
+﻿#include "mapsviewer.h"
 #include "ui_mapsviewer.h"
 
 #include <QPainter>
@@ -11,7 +11,7 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     connect(ui->btn_sw_style,SIGNAL(clicked()),this,SLOT(btn_sw_style_Click()));
     connect(ui->btn_sw_dD,SIGNAL(clicked()),this,SLOT(btn_sw_dD_Click()));
     connect(ui->btn_sw_LR,SIGNAL(clicked()),this,SLOT(btn_sw_LR_Click()));
-    mag = 2.0/10.0;
+    mag = 2.0f/10.0f;
     ui->VS_zoom->setRange(1,10);
     connect(ui->VS_zoom,SIGNAL(valueChanged(int)),this,SLOT(changZoom(int)));
     ui->VS_zoom->setValue(5);
