@@ -125,13 +125,13 @@ for(unsigned i=0;i<WAP_size;i++){
 
 */
 
-//    QString ip = "";
-//    int delay = 0;
+    QString ip = "10.10.10.101";
+    int delay = 1000;
 
-//    datareader = new dataReader;
-//    datareader->get_datareader(wap, ip, delay);
+    datareader = new dataReader;
+    datareader->get_datareader(wap, ip, delay);
 //    datareader->test();
-//    datareader->start();
+    //datareader->start();
 
 
     view = new MapsViewer;
@@ -142,4 +142,9 @@ for(unsigned i=0;i<WAP_size;i++){
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    this->datareader->start();
 }
