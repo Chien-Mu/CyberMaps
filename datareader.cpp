@@ -58,7 +58,6 @@ void dataReader::run()
 {
 
 
-
     while(1)
     {
         proc = new QProcess;

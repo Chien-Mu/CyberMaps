@@ -6,12 +6,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
 
     const unsigned WAP_size = 4;
-    WAP wap[WAP_size];
-    char ids[][SSID_SIZE] = {{"Aasdaadsf"},{"Badf"},{"Casdf"},{"Ddddddddddd"}};
-    Antenna ant[WAP_size*1];
-    //RSSI rssi[WAP_size*2];
-    RSSI rssi[12];
-    Launch lau;
+    wap = new WAP[WAP_size];
+    ant = new Antenna[WAP_size*1];
+    rssi = new RSSI[12];
+
+    ids = new char[WAP_size][SSID_SIZE]();
+    QString str[WAP_size];
+    str[0] = "Aasdaadsf";
+    str[1] = "Badf";
+    str[2] = "Casdfsdaf";
+    str[3] = "Dddddddd";
+    for(unsigned i = 0 ; i < WAP_size ; i++)
+        for(int j = 0 ; j < str[i].size() && j < SSID_SIZE ; j++)
+            ids[i][j] = str[i].at(j).toLatin1();
 
 
     wap[0].SSID = &ids[0]; //A
