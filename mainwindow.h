@@ -8,6 +8,7 @@
 #include "cyberglobal.h"
 #include "datareader.h"
 #include "multilateration.h"
+#include <QThread>
 
 
 namespace Ui {
@@ -32,11 +33,13 @@ private:
     MapsViewer *view;
 
     //data struct
+/*
     WAP *wap;
     SSID_ptr ids;
     Antenna *ant;
     RSSI *rssi;
     Launch lau;
+*/
 
 };
 
