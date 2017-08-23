@@ -76,7 +76,7 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
 
     //建立風格表
     if(style != 0)
-        delete style;
+        delete[] style;
     style = new vStyle[waps_size];
 
     //設定風格表
@@ -92,6 +92,10 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
         if(j == 15)
             j=8;
     }
+
+
+    //clear
+    QVector<vWAP>().swap(this->waps);
 
     //copy to vWAP
     vWAP wap;
@@ -121,7 +125,7 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
         }  
     }
     this->isSetting = false;
-    this->repaint();
+    this->update();
 }
 
 void MapsViewer::paintEvent(QPaintEvent *event){
