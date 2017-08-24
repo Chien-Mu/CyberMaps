@@ -4,6 +4,8 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
+    datareader = new dataReader;
+/*
 
     const unsigned WAP_size = 4;
     wap = new WAP[WAP_size];
@@ -119,31 +121,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ant[3].lau = lau;
     wap[3].ant = &ant[3];
 
+*/
 
-
-    referanceNode(WAP_size, wap);
+    //referanceNode(WAP_size, wap);
 
     /*
-for(unsigned i=0;i<WAP_size;i++){
+for(unsigned i=0;i<WAP_size;i++)
+
     qDebug() << "SSID:" << *wap[i].SSID[0];
     for(unsigned j=0;j<wap[i].ant[0].rssis_size;j++)
         qDebug() << "RSSI:" << *wap[i].ant[0].rssis[j].SSID << wap[i].ant[0].rssis[j].dBm;
 }
 
-*/
+
 
     QString ip = "10.10.10.101";
     int delay = 1000;
 
     datareader = new dataReader;
     datareader->get_datareader(wap, ip, delay);
-//    datareader->test();
-    //datareader->start();
-
+    datareader->test();
+    datareader->start();
+    qDebug()<<wap[0].ant[0].rssis[0].distance;
+    qDebug()<<wap[0].ant[1].rssis[0].distance;
 
     view = new MapsViewer;
-    view->drawWAPs(wap,WAP_size);
     view->show();
+    view->drawWAPs(wap,WAP_size);
+*/
 }
 
 MainWindow::~MainWindow()
