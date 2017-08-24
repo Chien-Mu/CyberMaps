@@ -28,10 +28,8 @@ public:
 
 
 private:
-    WAP *_routers;
-    SSID_ptr _ssid_router;
-    Antenna *_ant_router;
-    RSSI *_rssi_router;
+
+
     int _time_delay;
     QProcess *proc;
     QByteArray input_msg;
@@ -47,6 +45,7 @@ private:
     RSSI *rssi;
     Launch lau;
     MapsViewer *view;
+    unsigned WAP_size;
 
 signals:
 

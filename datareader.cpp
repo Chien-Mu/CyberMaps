@@ -24,25 +24,28 @@ void dataReader::test()
 
 void dataReader::get_datareader(WAP *routers)
 {
-    _routers = routers;
-    //qDebug()<<_routers[0].ant[0].rssis[0].dBm;
-    qDebug()<<"routers = " << routers;
-    qDebug()<<"_routers = " <<_routers;
+    //wap = routers;
+    //qDebug()<<wap[0].ant[0].rssis[0].dBm;
+    //qDebug()<<"routers = " << routers;
+    //qDebug()<<"wap = " <<wap;
 }
 
 void dataReader::rssi2distance(int router_index)
 {
     if(router_index == 1)
     {
-        float rssi_1 = _routers[0].ant[0].rssis[0].dBm;
-        float rssi_2 = _routers[0].ant[1].rssis[0].dBm;
+        float rssi_1 = wap[0].ant[0].rssis[0].dBm;
+        float rssi_2 = wap[0].ant[1].rssis[0].dBm;
 
         float distance_1 = exp((rssi_1+32.851)/(-8.782));
-        float distance_2 = exp((rssi_2+28.858)/(-2.27));
+        float distance_2 = exp((rssi_2+28.858)/(-7.27));
 
-        _routers[0].ant[0].rssis[0].distance = distance_1;
-        _routers[0].ant[1].rssis[0].distance = distance_2;
+        wap[0].ant[0].rssis[0].distance = distance_1;
+        wap[0].ant[1].rssis[0].distance = distance_2;
     }
+
+    qDebug()<<"distance1"<< wap[0].ant[0].rssis[0].distance;
+    qDebug()<<"distance2"<< wap[0].ant[1].rssis[0].distance;
 
 
 
@@ -54,31 +57,72 @@ void dataReader::string_filter(QString msg, int router_index)
     qDebug()<<"MAC:"<<msg.mid(5,17);
     qDebug()<<"RSSI1"<<(msg.mid(30,3)).toFloat();
     qDebug()<<"RSSI2"<<(msg.mid(34,3)).toFloat();
-    qDebug()<<_routers[0].ant[0].rssis[0].dBm;       */
+    qDebug()<<wap[0].ant[0].rssis[0].dBm;       */
 
-    //_routers[0].SSID = msg.mid(5,17);
-    if (router_index == 1)
+    //wap[0].SSID = msg.mid(5,17);
+
+    QStringList msg_list = msg.split("\n");
+    WAP_size = (msg_list.length())-1;
+    QString str[WAP_size];
+
+    for(int i=0;i<WAP_size;i++)
     {
-        qDebug()<<"_routers = " <<_routers;
-
-        _routers[0].ant[0].rssis[0].dBm = (msg.mid(30,3)).toFloat();
-        _routers[0].ant[1].rssis[0].dBm = (msg.mid(34,3)).toFloat();
-
-    }
-
-    else if (router_index == 2 )
-    {
-        mutex.lock();
-        _routers[1].ant[0].rssis[0].dBm = (msg.mid(30,3)).toFloat();
-        _routers[1].ant[1].rssis[0].dBm = (msg.mid(34,3)).toFloat();
-        mutex.unlock();
+        QString each_router_msg = msg_list.at(0);
+        str[i] = msg_list.at(i).mid(5,17);
+        qDebug()<<"str"<<i<<"="<<str[i];
     }
 
 
 
+    wap = new WAP[WAP_size];
+    ant = new Antenna[WAP_size*2];
+    rssi = new RSSI[2*WAP_size*(WAP_size-1)];
+    ids = new char[WAP_size][SSID_SIZE]();
 
-    qDebug()<<"rssi1_string fil"<< _routers[0].ant[0].rssis[0].dBm;
-    qDebug()<<"rssi2_string fil"<< _routers[0].ant[1].rssis[0].dBm;
+    for(unsigned i = 0 ; i < WAP_size ; i++)
+        for(int j = 0 ; j < str[i].size() && j < SSID_SIZE ; j++)
+            ids[i][j] = str[i].at(j).toLatin1();
+
+    ant[0].rssis = rssi;
+    ant[0].lau = lau;
+    wap[0].ant = &ant[0];
+
+    for (int i=1;i<=int(WAP_size);i++)
+    {
+        ant[i].rssis = &rssi[i*3];
+        wap[i].ant = &ant[i];
+        ant[i].lau = lau;
+    }
+
+
+
+    /*
+    ant[1].rssis = &rssi[3];
+    wap[1].ant = &ant[1];
+
+
+    ant[2].rssis = &rssi[6];
+    wap[2].ant = &ant[2];
+    ant[3].rssis = &rssi[9];
+    wap[3].ant = &ant[3];     */
+
+
+    for(int i=0;i<WAP_size;i++)
+    {
+        qDebug()<<"i = " << i;
+
+        wap[i].ant[0].rssis[0].dBm = (msg_list.at(i).mid(30,3)).toFloat();
+        wap[i].ant[1].rssis[0].dBm = (msg_list.at(i).mid(34,3)).toFloat();
+
+    }
+
+
+
+
+
+
+    qDebug()<<"rssi1_string fil"<< wap[0].ant[0].rssis[0].dBm;
+    qDebug()<<"rssi2_string fil"<< wap[0].ant[1].rssis[0].dBm;
 
     //qDebug()<<
 
@@ -90,6 +134,7 @@ void dataReader::run()
 {
     QString ip = "10.10.10.101";
     int time_delay = 1000;
+ /*
     const unsigned WAP_size = 4;
     wap = new WAP[WAP_size];
     ant = new Antenna[WAP_size*1];
@@ -104,6 +149,19 @@ void dataReader::run()
     for(unsigned i = 0 ; i < WAP_size ; i++)
         for(int j = 0 ; j < str[i].size() && j < SSID_SIZE ; j++)
             ids[i][j] = str[i].at(j).toLatin1();
+
+
+    ant[0].rssis = rssi;
+    wap[0].ant = &ant[0];
+    ant[1].rssis = &rssi[3];
+    wap[1].ant = &ant[1];
+    ant[2].rssis = &rssi[6];
+    wap[2].ant = &ant[2];
+    ant[3].rssis = &rssi[9];
+    wap[3].ant = &ant[3];
+    */
+
+    /*
     wap[0].SSID = &ids[0]; //A
     wap[0].index = 0;
     //wap[0].wapX = 100;
@@ -201,6 +259,7 @@ void dataReader::run()
     ant[3].rssis = &rssi[9];
     ant[3].lau = lau;
     wap[3].ant = &ant[3];
+*/
 
     this->get_datareader(wap);
 
@@ -224,10 +283,16 @@ void dataReader::run()
         QString input_msg = proc->readAll().data();
         qDebug()<<"input_msg:"<<input_msg;
         //qDebug()<<"split test 1 "<<router1;
+        QStringList msg_list = input_msg.split("\n");
+        qDebug()<<"msg list=" << msg_list;
+        qDebug()<<"msg list len"<< msg_list.length();
         this->string_filter(QString(input_msg), 1);
         this->rssi2distance(1);
+        referanceNode(WAP_size, wap);
         view->drawWAPs(wap,WAP_size);
-
+        delete wap;
+        delete rssi;
+        delete ant;
 
     }
 }
