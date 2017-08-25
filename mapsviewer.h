@@ -11,8 +11,8 @@
 
 /* RSSI,Received signal strength indication */
 struct vRSSI{
-    QString SSID;                   //Source device ID
-    unsigned SSID_index;            //Source device tag
+    QString ssid;                   //Source device ID
+    unsigned ssid_index;            //Source device tag
     float dBm;                      //Received signal strength
     float distance;
 };
@@ -31,7 +31,7 @@ struct vAntenna{
 
 /* WAP,Wireless Access Point */
 struct vWAP{
-    QString SSID;                  //ID
+    QString ssid;                  //ID
     unsigned index;                //tag
     unsigned antenna_size;
     QVector<vAntenna> ant;
