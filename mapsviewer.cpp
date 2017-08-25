@@ -102,7 +102,7 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
     vAntenna ant;
     vRSSI rssi;
     for(unsigned i=0;i<waps_size;i++){
-        wap.SSID = waps[i].SSID[0];
+        wap.ssid = waps[i].ssid[0];
         wap.index = waps[i].index;
         wap.wapXY.setX((int)(waps[i].wapX) + Woutset); //順面設定起始點
         wap.wapXY.setY((int)(waps[i].wapY) + Houtset);
@@ -118,8 +118,8 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
             for(unsigned k=0;k<waps[i].ant[j].rssis_size;k++){
                 rssi.dBm = waps[i].ant[j].rssis[k].dBm;
                 rssi.distance = waps[i].ant[j].rssis[k].distance;
-                rssi.SSID = waps[i].ant[j].rssis[k].SSID[0];
-                rssi.SSID_index = waps[i].ant[j].rssis[k].SSID_index;
+                rssi.ssid = waps[i].ant[j].rssis[k].ssid[0];
+                rssi.ssid_index = waps[i].ant[j].rssis[k].ssid_index;
                 this->waps[i].ant[j].rssis.push_back(rssi);
             }    
         }  
@@ -143,7 +143,7 @@ void MapsViewer::paintEvent(QPaintEvent *event){
             if(!isLauch){
                 //draw RSSI
                 for(int k=0;k<waps[i].ant[j].rssis.size();k++){
-                    index = waps[i].ant[j].rssis[k].SSID_index;
+                    index = waps[i].ant[j].rssis[k].ssid_index;
                     if(this->isVDist)
                         range = waps[i].ant[j].rssis[k].distance*pixelRate;
                     else
@@ -223,7 +223,7 @@ void MapsViewer::paintEvent(QPaintEvent *event){
         pen.setWidth(3);
         painter.setPen(pen);
         painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate -10, waps[i].wapXY.y()*pixelRate +25),
-                         waps[i].SSID);
+                         waps[i].ssid);
 
         if(isLauch){
             pen.setBrush(QColor(style[i].R, style[i].G, style[i].B));

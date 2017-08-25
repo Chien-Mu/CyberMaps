@@ -14,7 +14,7 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
 
     for(i=0; i<(int)(numberOfDevice-1); i++)
     {
-        if(waps[1].ant[0].rssis[i].SSID_index==0)
+        if(waps[1].ant[0].rssis[i].ssid_index==0)
         {
             waps[1].wapX = waps[1].ant[0].rssis[i].distance;
             waps[1].wapY = 0;
@@ -45,11 +45,11 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
     float d01=0.0, d02=0.0, d12=0.0;
     for(i=0; i<(int)numberOfDevice; i++)
     {
-        if(waps[0].ant[0].rssis[i].SSID_index==1)   //B
+        if(waps[0].ant[0].rssis[i].ssid_index==1)   //B
         {
             d01 = waps[0].ant[0].rssis[i].distance;
         }
-        else if(waps[0].ant[0].rssis[i].SSID_index==2)  //C
+        else if(waps[0].ant[0].rssis[i].ssid_index==2)  //C
         {
             d02 = waps[0].ant[0].rssis[i].distance;
         }
@@ -57,7 +57,7 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
 
     for(i=0; i<(int)numberOfDevice; i++)
     {
-        if(waps[1].ant[0].rssis[i].SSID_index==2)
+        if(waps[1].ant[0].rssis[i].ssid_index==2)
         {
             d12 = waps[1].ant[0].rssis[i].distance;
         }
@@ -85,15 +85,15 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
         {
             for(int j=0; j<(int)numberOfDevice; j++)
             {
-                if(waps[i].ant[0].rssis[j].SSID_index==0)
+                if(waps[i].ant[0].rssis[j].ssid_index==0)
                 {
                     di0 = waps[i].ant[0].rssis[j].distance;
                 }
-                else if(waps[i].ant[0].rssis[j].SSID_index==1)
+                else if(waps[i].ant[0].rssis[j].ssid_index==1)
                 {
                     di1 = waps[i].ant[0].rssis[j].distance;
                 }
-                else if(waps[i].ant[0].rssis[j].SSID_index==2)
+                else if(waps[i].ant[0].rssis[j].ssid_index==2)
                 {
                     di2 = waps[i].ant[0].rssis[j].distance;
                 }

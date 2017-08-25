@@ -17,19 +17,14 @@ class dataReader : public QThread
     Q_OBJECT
 public:
     explicit dataReader(QObject *parent = 0);
-
-
     void run();
-    bool stop;
+    void stop();
+    bool isStop;
     void test();
 
     void get_datareader(WAP *routers);
 
-
-
 private:
-
-
     int _time_delay;
     QProcess *proc;
     QByteArray input_msg;
@@ -38,14 +33,19 @@ private:
 
     void rssi2distance(int router_index);
     void string_filter(QString msg, int router_index);
+    void inputArrayMap(QString linkHostMAC, QString &value, bool isServer = false);
+    void clearArray(int size);
 
     WAP *wap;
-    SSID_ptr ids;
+    SSID_arr ids;
+    char id_NULL[4];
     Antenna *ant;
     RSSI *rssi;
-    Launch lau;
     MapsViewer *view;
-    unsigned WAP_size;
+    unsigned wap_size;
+    unsigned ant_size;
+    unsigned rssi_size;
+    unsigned oarn;
 
 signals:
 
