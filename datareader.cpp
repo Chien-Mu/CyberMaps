@@ -297,6 +297,14 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
     //string split
     QStringList list = value.split("\n");
 
+    //固定 78 在 wap[1], 20 在 wap[2]
+    if(list.size() >= 3)
+        if(list[0].mid(20,2) != "78" && list[1].mid(20,2) == "78"){
+            QString tmp = list[1];
+            list[1] = list[0];
+            list[0] = tmp;
+        }
+
     //create and link memory
     if(isServer){
         //delete
