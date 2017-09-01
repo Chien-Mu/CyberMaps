@@ -276,7 +276,7 @@ void dataReader::run()
         }
 
         QString input_msg = proc->readAll().data();
-        QString linkHostMAC = "02:00:00:00:00:30";   //levy
+        QString linkHostMAC = "00:66:66:66:66:66";   //levy
         inputArrayMap(linkHostMAC, input_msg, true);  //levy
 
         qDebug()<<"input_msg:"<<input_msg;
