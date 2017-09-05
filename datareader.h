@@ -22,8 +22,6 @@ public:
     bool isStop;
     void test();
 
-    void get_datareader(WAP *routers);
-
 private:
     int _time_delay;
     QProcess *proc;
@@ -31,8 +29,8 @@ private:
     QString _ip;
     QMutex mutex;
 
+    void site_survery_filter(QString msg, QString device_mac);
     void rssi2distance(int router_index);
-    void string_filter(QString msg, int router_index);
     void inputArrayMap(QString linkHostMAC, QString &value, bool isServer = false);
     void clearArray(int size);
 
