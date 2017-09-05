@@ -7,6 +7,9 @@
 
 void referanceNode(const unsigned numberOfDevice, WAP *waps)
 {
+    qDebug()<< "wap_size" << numberOfDevice;
+    qDebug()<< "waps0_ssid" << waps[0].ssid;
+    qDebug()<< "diatance" << waps[0].ant[0].rssis[0].distance;
     int i=0;
 
     waps[0].wapX = 0;
@@ -16,7 +19,8 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
     {
         if(waps[1].ant[0].rssis[i].ssid_index==0)
         {
-            waps[1].wapX = waps[1].ant[0].rssis[i].distance;
+            //waps[1].wapX = waps[1].ant[0].rssis[i].distance;
+            waps[1].wapX = waps[0].ant[1].rssis[0].distance;   //phymon:use ant 1 to cal
             waps[1].wapY = 0;
         }
     }
@@ -43,7 +47,7 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
     */
 
     float d01=0.0, d02=0.0, d12=0.0;
-    for(i=0; i<(int)numberOfDevice; i++)
+/*    for(i=0; i<(int)numberOfDevice; i++)
     {
         if(waps[0].ant[0].rssis[i].ssid_index==1)   //B
         {
@@ -54,7 +58,17 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
             d02 = waps[0].ant[0].rssis[i].distance;
         }
     }
+*/
+    d01 = waps[0].ant[1].rssis[0].distance;
+    d02 = waps[0].ant[1].rssis[1].distance;
+    d12 = waps[1].ant[0].rssis[0].distance;
 
+    qDebug()<<"d01="<<d01;
+    qDebug()<<"d02="<<d02;
+    qDebug()<<"d12="<<d12;
+
+
+/*
     for(i=0; i<(int)numberOfDevice; i++)
     {
         if(waps[1].ant[0].rssis[i].ssid_index==2)
@@ -62,6 +76,7 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
             d12 = waps[1].ant[0].rssis[i].distance;
         }
     }
+*/
 
     cosine = (pow(d01,2) + pow(d02,2) - pow(d12,2))/(2*d01*d02);
     alpha = acos(cosine);
