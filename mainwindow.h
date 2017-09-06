@@ -33,13 +33,12 @@ private:
     MapsViewer *view;
 
     //data struct
-/*
     WAP *wap;
-    SSID_ptr ids;
+    SSID_arr ids;
+    char id_NULL[4];
     Antenna *ant;
     RSSI *rssi;
     Launch lau;
-*/
 
 };
 

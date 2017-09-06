@@ -128,8 +128,8 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
             waps[i].wapY = gaussianMatrix[2][3]/gaussianMatrix[2][2];
             waps[i].wapX = (gaussianMatrix[1][3] - waps[i].wapY*gaussianMatrix[1][2])/gaussianMatrix[1][1];
 
-            //qDebug()<< "D.x = " << waps[i].wapY;
-            //qDebug()<< "D.y = " << waps[i].wapX;
+            qDebug()<< "D.x = " << waps[i].wapY;
+            qDebug()<< "D.y = " << waps[i].wapX;
         }
     }
 
