@@ -30,7 +30,7 @@ void dataReader::site_survery_filter(QString msg, QString device_mac)
 {
     QStringList site_survery_list = msg.split("\n");
     int router_count = site_survery_list.size();
-    for(int i=0; i<=router_count; i++)
+    for(int i=0; i<router_count; i++)
     {
         QStringList list = site_survery_list[i].split(":");
         //qDebug()<<"router list"<<site_survery_list[i];
@@ -39,9 +39,9 @@ void dataReader::site_survery_filter(QString msg, QString device_mac)
             QStringList rssi_fil = list[5].split("-");
             if (rssi_fil.size()>1)
             {
-                qDebug()<<"rssi"<<rssi_fil[1].mid(0,2);
+                //qDebug()<<"rssi"<<rssi_fil[1].mid(0,2);
                 float rssi = 0-(rssi_fil[1].mid(0,2)).toFloat();
-                qDebug()<<"rssi_float"<< rssi;
+                qDebug()<<"rssi_3"<< rssi;
                 wap[1].ant[0].rssis[0].dBm = rssi;
             }
             break;
@@ -64,13 +64,14 @@ void dataReader::rssi2distance(int router_index)
 
         float distance_1 = exp((rssi_1+32.851)/(-8.782));
         float distance_2 = exp((rssi_2+28.858)/(-7.27));
+        qDebug()<<"rssi_1:"<< rssi_2;
 
         wap[0].ant[0].rssis[0].distance = distance_1;
-        wap[0].ant[1].rssis[0].distance = distance_2;
+        wap[0].ant[1].rssis[0].distance = 10*distance_2;
     }
 
-    qDebug()<<"distance1"<< wap[0].ant[0].rssis[0].distance;
-    qDebug()<<"distance2"<< wap[0].ant[1].rssis[0].distance;
+    //qDebug()<<"distance1"<< wap[0].ant[0].rssis[0].distance;
+    //qDebug()<<"distance2"<< wap[0].ant[1].rssis[0].distance;
 
 
 
@@ -80,30 +81,35 @@ void dataReader::rssi2distance(int router_index)
         float rssi_1 = wap[0].ant[0].rssis[1].dBm;
         float rssi_2 = wap[0].ant[1].rssis[1].dBm;
 
+        qDebug()<<"rssi_2:"<< rssi_2;
+
         float distance_1 = exp((rssi_1+32.851)/(-8.782));
         float distance_2 = exp((rssi_2+28.858)/(-7.27));
 
         wap[0].ant[0].rssis[1].distance = distance_1;
-        wap[0].ant[1].rssis[1].distance = distance_2;
+        wap[0].ant[1].rssis[1].distance = 10*distance_2;
     }
 
-    qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
-    qDebug()<<"distance2"<< wap[0].ant[1].rssis[1].distance;
+    //qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
+    //qDebug()<<"distance2"<< wap[0].ant[1].rssis[1].distance;
 
     if(router_index == 3)
     {
 
         float rssi_1 = wap[1].ant[0].rssis[0].dBm;
 
+        qDebug()<<"rssi_3:"<< rssi_1;
+        float distance_1 = exp((rssi_1+28.858)/(-7.27));
 
-        float distance_1 = exp((rssi_1+32.851)/(-8.782));
 
-
-        wap[1].ant[0].rssis[0].distance = distance_1;
+        wap[1].ant[0].rssis[0].distance = 10*distance_1;
 
     }
 
-    qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
+    //qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
+
+
+
 }
 
 
@@ -161,11 +167,12 @@ void dataReader::run()
         rssi2distance(1);
         rssi2distance(2);
         rssi2distance(3);
+        //qDebug()<<"input_msg:"<<input_msg;
         //qDebug()<<"split test 1 "<<router1;
         QStringList msg_list = input_msg.split("\n");
-        qDebug()<<"msg list=" << msg_list;
-        qDebug()<< msg_list[1];
-        qDebug()<<"msg list len"<< msg_list.length() << msg_list.size();
+        //qDebug()<<"msg list=" << msg_list;
+        //qDebug()<< msg_list[1];
+        //qDebug()<<"msg list len"<< msg_list.length() << msg_list.size();
         //this->string_filter(QString(input_msg), 1);
         //this->rssi2distance(1);
         referanceNode(wap_size, wap);

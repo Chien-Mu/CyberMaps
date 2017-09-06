@@ -87,7 +87,7 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
     qDebug()<< "C.x = " << waps[2].wapX;
     qDebug()<< "C.y = " << waps[2].wapY;
 
-
+/*
 
     if(numberOfDevice>=4)
     {
@@ -132,6 +132,8 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps)
             qDebug()<< "D.y = " << waps[i].wapX;
         }
     }
+
+*/
 
 }
 
