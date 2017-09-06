@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include <QTime>
+#include <QDebug>
 
 MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer){
     ui->setupUi(this);
@@ -12,15 +13,15 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     connect(ui->btn_sw_dD,SIGNAL(clicked()),this,SLOT(btn_sw_dD_Click()));
     connect(ui->btn_sw_LR,SIGNAL(clicked()),this,SLOT(btn_sw_LR_Click()));
     mag = 2.0f/10.0f;
-    ui->VS_zoom->setRange(1,10);
+    ui->VS_zoom->setRange(1,50);
     connect(ui->VS_zoom,SIGNAL(valueChanged(int)),this,SLOT(changZoom(int)));
     ui->VS_zoom->setValue(5);
 
 
     //畫面長寬限制
     screenRate = 0.3;
-    Woutset = (this->width() - (this->width() * screenRate)) / 2.0; //此始點
-    Houtset = (this->height() - (this->height() * screenRate)) / 2.0;
+    Woutset = this->width() * screenRate; //此始點
+    Houtset = this->height() * screenRate;
 
     this->style = 0;
     this->isSetting = false;
@@ -32,7 +33,7 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
 void MapsViewer::changZoom(int value){
     pixelRate = mag * (float)value;
     ui->la_zoom->setText(QString::number(pixelRate) + "x");
-    this->repaint();
+    this->update();
 }
 
 void MapsViewer::btn_sw_LR_Click(){
@@ -41,7 +42,7 @@ void MapsViewer::btn_sw_LR_Click(){
         ui->la_sw_LR->setText("Lauch");
     else
         ui->la_sw_LR->setText("RSSI");
-    this->repaint();
+    this->update();
 }
 
 void MapsViewer::btn_sw_style_Click(){
@@ -59,7 +60,7 @@ void MapsViewer::btn_sw_style_Click(){
         ui->la_sw_style->setText("Dense");
     else if(index ==2)
         ui->la_sw_style->setText("Gradient");
-    this->repaint();
+    this->update();
 }
 
 void MapsViewer::btn_sw_dD_Click(){
@@ -68,7 +69,7 @@ void MapsViewer::btn_sw_dD_Click(){
         ui->la_sw_dD->setText("Distance");
     else
         ui->la_sw_dD->setText("dBm");
-    this->repaint();
+    this->update();
 }
 
 void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
@@ -104,8 +105,8 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size){
     for(unsigned i=0;i<waps_size;i++){
         wap.ssid = waps[i].ssid[0];
         wap.index = waps[i].index;
-        wap.wapXY.setX((int)(waps[i].wapX) + Woutset); //順面設定起始點
-        wap.wapXY.setY((int)(waps[i].wapY) + Houtset);
+        wap.wapXY.setX((int)(waps[i].wapX));
+        wap.wapXY.setY((int)(waps[i].wapY));
         wap.antenna_size = waps[i].antenna_size;
         this->waps.push_back(wap);
         for(unsigned j=0;j<waps[i].antenna_size;j++){
@@ -153,9 +154,11 @@ void MapsViewer::paintEvent(QPaintEvent *event){
 
                     if(estyle == Gradient){
                         //漸層
-                        QRadialGradient gradient(QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate),
+                        QRadialGradient gradient(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
+                                                        waps[i].wapXY.y()*pixelRate+Houtset),
                                                  (int)(range),
-                                                 QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate));
+                                                 QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
+                                                        waps[i].wapXY.y()*pixelRate+Houtset));
                         gradient.setColorAt(0, QColor::fromRgbF(style[index].R/255.0,
                                                                 style[index].G/255.0,
                                                                 style[index].B/255.0,
@@ -173,7 +176,8 @@ void MapsViewer::paintEvent(QPaintEvent *event){
                     pen.setBrush(QColor(style[index].R,style[index].G,style[index].B));
                     pen.setWidth(1);
                     painter.setPen(pen);
-                    painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate),
+                    painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
+                                               waps[i].wapXY.y()*pixelRate+Houtset),
                                         (int)(range),
                                         (int)(range));
                 }
@@ -186,9 +190,11 @@ void MapsViewer::paintEvent(QPaintEvent *event){
 
                 if(estyle == Gradient){
                     //漸層
-                    QRadialGradient gradient(QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate),
+                    QRadialGradient gradient(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
+                                                    waps[i].wapXY.y()*pixelRate+Houtset),
                                              (int)(range),
-                                             QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate));
+                                             QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
+                                                    waps[i].wapXY.y()*pixelRate+Houtset));
                     gradient.setColorAt(0, QColor::fromRgbF(style[i].R/255.0,
                                                             style[i].G/255.0,
                                                             style[i].B/255.0,
@@ -206,7 +212,8 @@ void MapsViewer::paintEvent(QPaintEvent *event){
                 pen.setBrush((QColor(style[i].R,style[i].G,style[i].B)));
                 pen.setWidth(1);
                 painter.setPen(pen);
-                painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate),
+                painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
+                                           waps[i].wapXY.y()*pixelRate+Houtset),
                                     (int)(range),
                                     (int)(range));
             }
@@ -218,11 +225,13 @@ void MapsViewer::paintEvent(QPaintEvent *event){
     for(int i=0;i<waps.size();i++){
         painter.setBrush(QBrush(QColor(style[i].R, style[i].G, style[i].B),Qt::SolidPattern));
         painter.setPen(Qt::NoPen);
-        painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate, waps[i].wapXY.y()*pixelRate),5,5);
+        painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
+                                   waps[i].wapXY.y()*pixelRate+Houtset),5,5);
         pen.setBrush(Qt::white);
         pen.setWidth(3);
         painter.setPen(pen);
-        painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate -10, waps[i].wapXY.y()*pixelRate +25),
+        painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate+Woutset -10,
+                                waps[i].wapXY.y()*pixelRate+Houtset +25),
                          waps[i].ssid);
 
         if(isLauch){
@@ -235,8 +244,8 @@ void MapsViewer::paintEvent(QPaintEvent *event){
                 else
                     dD = QString::number(waps[i].ant[j].lau.dBm) + " -dBm";
 
-                painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate - 10,
-                                        waps[i].wapXY.y()*pixelRate + 40 + (j*40)),dD);
+                painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate+Woutset - 10,
+                                        waps[i].wapXY.y()*pixelRate+Houtset + 40 + (j*40)),dD);
             }
         }
     }
@@ -245,16 +254,16 @@ void MapsViewer::paintEvent(QPaintEvent *event){
     pen.setBrush(Qt::white);
     pen.setWidth(1);
     painter.setPen(pen);
-    int standard = (100.0*pixelRate) + 30;
+    int standard = (10.0*pixelRate) + 30;
 
     painter.drawLine(30, this->height()-20, standard, this->height()-20);  //standard line
     painter.drawLine(30, this->height()-20, 30, this->height()-30); //0
     painter.drawLine(standard, this->height()-20,  standard, this->height()-30); //100
     painter.drawText(30-3, this->height()-35,"0");
     if(isVDist)
-        painter.drawText(standard - 10, this->height()-35,"100(M)");
+        painter.drawText(standard, this->height()-35,"10(M)");
     else
-        painter.drawText(standard - 10, this->height()-35,"100(-dBm)");
+        painter.drawText(standard, this->height()-35,"10(-dBm)");
 }
 
 MapsViewer::~MapsViewer()
