@@ -13,12 +13,16 @@ struct RSSI{
     SSID ssid;                      //Source device ID
     unsigned ssid_index;            //Source device tag
     float dBm;                      //Received signal strength
+};
+
+struct Distance{
+    SSID ssid;                      //Source device ID
+    unsigned ssid_index;            //Source device tag
     float distance;
 };
 
 struct Launch{
     float dBm;                      //wifi signal strength
-    float distance;
 };
 
 struct Antenna{
@@ -35,13 +39,17 @@ struct WAP{
     unsigned index;                 //tag
     unsigned antenna_size;
     Antenna *ant;
+    unsigned dist_size;
+    Distance *dist;
     float wapX;
     float wapY;
 };
 
-/// dst 空間要與 src 一樣
-void cloneWAP(WAP *src, unsigned src_size,
-              WAP *dst, SSID_arr dst_ssid, Antenna *dst_ant, RSSI *dst_rssi);
+struct lastDistance{
+    float distance;
+    unsigned index1;
+    unsigned index2;
+};
 
 
 #endif // CYBERGLOBAL_H

@@ -8,24 +8,27 @@
 
 #include "cyberglobal.h"
 
-
 /* RSSI,Received signal strength indication */
 struct vRSSI{
     QString ssid;                   //Source device ID
     unsigned ssid_index;            //Source device tag
     float dBm;                      //Received signal strength
+};
+
+struct vDistance{
+    QString ssid;                   //Source device ID
+    unsigned ssid_index;            //Source device tag
     float distance;
 };
 
 struct vLaunch{
     float dBm;                      //wifi signal strength
-    float distance;
 };
 
 struct vAntenna{
     unsigned rssis_size;
     QVector<vRSSI> rssis;
-    QPoint antXY;
+    QPointF antXY;
     vLaunch lau;
 };
 
@@ -33,9 +36,17 @@ struct vAntenna{
 struct vWAP{
     QString ssid;                  //ID
     unsigned index;                //tag
+    unsigned dist_size;
+    QVector<vDistance> dist;
     unsigned antenna_size;
     QVector<vAntenna> ant;
-    QPoint wapXY;
+    QPointF wapXY;
+};
+
+struct vlastDistance{
+    float distance;
+    unsigned index1;
+    unsigned index2;
 };
 
 struct vStyle{
@@ -62,7 +73,7 @@ class MapsViewer : public QWidget
 public:
     explicit MapsViewer(QWidget *parent = 0);
     ~MapsViewer();
-    void drawWAPs(WAP *waps, const unsigned waps_size);
+    void drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *lastDist, const unsigned lastDist_size);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -88,6 +99,7 @@ private:
 
     //value
     QVector<vWAP> waps;
+    QVector<vlastDistance> lastDist;
 
 private slots:
     void btn_sw_dD_Click();

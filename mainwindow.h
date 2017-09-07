@@ -27,7 +27,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    /*
+/*
     MapsViewer *view;
 
     //data struct
@@ -36,8 +36,9 @@ private:
     char id_NULL[4];
     Antenna *ant;
     RSSI *rssi;
+    Distance *dist;
     Launch lau;
-    */
+*/
 };
 
 #endif // MAINWINDOW_H

@@ -10,8 +10,6 @@
 #include "mapsviewer.h"
 #include "multilateration.h"
 
-
-
 class dataReader : public QThread
 {
     Q_OBJECT
@@ -39,11 +37,14 @@ private:
     char id_NULL[4];
     Antenna *ant;
     RSSI *rssi;
+    Distance *dist;
     MapsViewer *view;
     unsigned wap_size;
     unsigned ant_size;
     unsigned rssi_size;
+    unsigned dist_size;
     unsigned oarn;
+    unsigned owdn;
 
 signals:
 

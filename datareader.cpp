@@ -11,6 +11,7 @@ dataReader::dataReader(QObject *parent) : QThread(parent)
     id_NULL[3] = 'L';
     wap = 0;
     ant = 0;
+    dist = 0;
     rssi = 0;
     ids = 0;
 
@@ -103,9 +104,6 @@ void dataReader::rssi2distance(int router_index)
     }
 
     qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
-
-
-
 }
 
 
@@ -156,13 +154,13 @@ void dataReader::run()
 
 
         //QString input_msg = proc->readAll().data();
-        QString linkHostMAC = "00:66:66:66:66:66";   //levy
-        inputArrayMap(linkHostMAC, input_msg, true);  //levy
+        qDebug()<<"input_msg:"<<input_msg;
+        QString linkHostMAC = "00:66:66:66:66:66";
+        inputArrayMap(linkHostMAC, input_msg, true);
         site_survery_filter(input_msg_2, "20");
         rssi2distance(1);
         rssi2distance(2);
         rssi2distance(3);
-        qDebug()<<"input_msg:"<<input_msg;
         //qDebug()<<"split test 1 "<<router1;
         QStringList msg_list = input_msg.split("\n");
         qDebug()<<"msg list=" << msg_list;
@@ -188,7 +186,7 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
             list[0] = tmp;
         }
 
-    //create and link memory
+    //create and link all array
     if(isServer){
         //delete
         clearArray(wap_size);
@@ -197,9 +195,12 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
         wap_size = list.size(); //原應該要 +1(包含link本機也要算進去)，但 split string 都會多切一個空 array，所以就不用
         ant_size = wap_size * DEVICE_ANT;
         oarn = wap_size-1; //One Ant Rssi Number 是每支天線(ant)會得到的RSSI數量
+        owdn = oarn; //One Wap Distance Number 每台WAP會得到的 Distance 數量
         rssi_size = wap_size * oarn * DEVICE_ANT;
+        dist_size = rssi_size;
         wap = new WAP[wap_size];
         ant = new Antenna[ant_size];
+        dist = new Distance[dist_size];
         rssi = new RSSI[rssi_size];
         ids = new char *[wap_size];
         for(unsigned i=0 ; i<wap_size ; i++)
@@ -218,15 +219,22 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
         }
 
         //link memory and default value
-        int antCount=0,rssiCount=0;
+        int antCount=0,rssiCount=0,distCount=0;
         Launch lau;
         lau.dBm = 0.0;
-        lau.distance = 0.0;
         for(unsigned i=0 ; i<wap_size ; i++){
             wap[i].index = i;
             wap[i].ssid = ids[i];
             wap[i].wapX = 0.0;
             wap[i].wapY = 0.0;
+            wap[i].dist_size = owdn;
+            wap[i].dist = &dist[distCount];
+            distCount += owdn;
+            for(unsigned jj=0 ; jj<owdn ; jj++){
+                wap[i].dist[jj].distance = 0.0;
+                wap[i].dist[jj].ssid = id_NULL;
+                wap[i].dist[jj].ssid_index = 0;
+            }
             wap[i].antenna_size = DEVICE_ANT;
             wap[i].ant = &ant[antCount];
             antCount += DEVICE_ANT;
@@ -239,7 +247,6 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
                 rssiCount += oarn;
                 for(unsigned k=0 ; k<oarn ; k++){
                     wap[i].ant[j].rssis[k].dBm = 0.0;
-                    wap[i].ant[j].rssis[k].distance = 0.0;
                     wap[i].ant[j].rssis[k].ssid = id_NULL;
                     wap[i].ant[j].rssis[k].ssid_index = 0;
                 }
@@ -248,9 +255,10 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
     }
 
 
-    int one,sem,two; //semicolon分號
+    int one,sem,two; //sem(semicolon分號)
     for(unsigned i=0 ; i<wap_size ; i++)
-        if(linkHostMAC == wap[i].ssid){   //只往 linkHostMAC 灌 rssi
+        if(linkHostMAC == wap[i].ssid){   //只往 linkHostMAC 灌 rssi data and rssi、distance ssid_index
+            //rssi
             for(unsigned j=0 ; j<oarn ; j++){
                 //dBm
                 one = list[j].indexOf('-',29);
@@ -271,14 +279,32 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
                         break;
                     }
             }
+
+            //Distance
+            for(unsigned jj=0 ; jj<owdn ; jj++){
+                //ssid and ssid_index(distance data是使用者後面自己要灌的)
+                for(unsigned kk=0 ; kk<wap_size ; kk++)
+                    if(list[jj].mid(5,17) == wap[kk].ssid){
+                        dist[ i * owdn + jj ].ssid = wap[kk].ssid;
+                        dist[ i * owdn + jj ].ssid_index = wap[kk].index;
+                        break;
+                    }
+            }
+
             break;
         }
 
-
+/*
     //驗證(test)
     for(unsigned i=0 ; i<wap_size ; i++){
         cout << wap[i].index << endl;
         cout << wap[i].ssid << endl;
+        cout << wap[i].dist_size << endl;
+        for(unsigned jj=0 ; jj<owdn ; jj++){
+            cout << wap[i].dist[jj].distance << endl;
+            cout << wap[i].dist[jj].ssid << endl;
+            cout << wap[i].dist[jj].ssid_index << endl;
+        }
         cout << wap[i].antenna_size << endl;
         for(unsigned j=0 ; j<DEVICE_ANT ; j++){
             cout << wap[i].ant[j].rssis_size << endl;
@@ -286,10 +312,10 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
                 cout << wap[i].ant[j].rssis[k].ssid << endl;
                 cout << wap[i].ant[j].rssis[k].ssid_index << endl;
                 cout << wap[i].ant[j].rssis[k].dBm << endl;
-                cout << wap[i].ant[j].rssis[k].distance << endl;
             }
         }
     }
+*/
 }
 
 void dataReader::clearArray(int size){
@@ -297,6 +323,8 @@ void dataReader::clearArray(int size){
         delete[] wap;
     if(ant != 0)
         delete[] ant;
+    if(dist != 0)
+        delete[] dist;
     if(rssi != 0)
         delete[] rssi;
     if(ids != 0){
@@ -306,6 +334,7 @@ void dataReader::clearArray(int size){
     }
     wap = 0;
     ant = 0;
+    dist = 0;
     rssi = 0;
     ids = 0;
 }
