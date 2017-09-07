@@ -67,7 +67,7 @@ void dataReader::rssi2distance(int router_index)
         qDebug()<<"rssi_1:"<< rssi_2;
 
         wap[0].ant[0].rssis[0].distance = distance_1;
-        wap[0].ant[1].rssis[0].distance = 10*distance_2;
+        wap[0].ant[1].rssis[0].distance = distance_2;
     }
 
     //qDebug()<<"distance1"<< wap[0].ant[0].rssis[0].distance;
@@ -87,7 +87,7 @@ void dataReader::rssi2distance(int router_index)
         float distance_2 = exp((rssi_2+28.858)/(-7.27));
 
         wap[0].ant[0].rssis[1].distance = distance_1;
-        wap[0].ant[1].rssis[1].distance = 10*distance_2;
+        wap[0].ant[1].rssis[1].distance = distance_2;
     }
 
     //qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
@@ -102,7 +102,7 @@ void dataReader::rssi2distance(int router_index)
         float distance_1 = exp((rssi_1+28.858)/(-7.27));
 
 
-        wap[1].ant[0].rssis[0].distance = 10*distance_1;
+        wap[1].ant[0].rssis[0].distance = distance_1;
 
     }
 
