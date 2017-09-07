@@ -5,8 +5,8 @@
 
 #include "mapsviewer.h"
 #include "cyberglobal.h"
-//#include "datareader.h"
-//#include "multilateration.h"
+#include "datareader.h"
+#include "multilateration.h"
 #include <QThread>
 
 namespace Ui {
@@ -20,13 +20,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    //dataReader *datareader;
+    dataReader *datareader;
 
 private slots:
     void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
+/*
     MapsViewer *view;
 
     //data struct
@@ -37,6 +38,7 @@ private:
     RSSI *rssi;
     Distance *dist;
     Launch lau;
+*/
 };
 
 #endif // MAINWINDOW_H

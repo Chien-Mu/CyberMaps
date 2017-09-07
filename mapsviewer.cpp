@@ -4,7 +4,6 @@
 #include <QPainter>
 #include <QTime>
 #include <QtMath>
-#include <QDebug>
 
 MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer){
     ui->setupUi(this);
@@ -17,7 +16,6 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     ui->VS_zoom->setRange(1,50);
     connect(ui->VS_zoom,SIGNAL(valueChanged(int)),this,SLOT(changZoom(int)));
     ui->VS_zoom->setValue(5);
-
 
     //畫面長寬限制
     screenRate = 0.3;

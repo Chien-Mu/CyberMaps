@@ -8,7 +8,6 @@
 
 #include "cyberglobal.h"
 
-
 /* RSSI,Received signal strength indication */
 struct vRSSI{
     QString ssid;                   //Source device ID
