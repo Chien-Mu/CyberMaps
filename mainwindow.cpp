@@ -166,8 +166,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     lastDist[0].index1 = 0;
     lastDist[0].index2 = 1;
     lastDist[1].distance = 80;
-    lastDist[1].index1 = 1;
-    lastDist[1].index2 = 2;
+    lastDist[0].index1 = 0;
+    lastDist[0].index2 = 1;
     lastDist[2].distance = 113.137f;
     lastDist[2].index1 = 2;
     lastDist[2].index2 = 0;

@@ -17,13 +17,13 @@ SOURCES += main.cpp\
     mapsviewer.cpp \
     cyberglobal.cpp \
     datareader.cpp \
-    #multilateration.cpp
+    multilateration.cpp
 
 HEADERS  += mainwindow.h \
     mapsviewer.h \
     cyberglobal.h \
     datareader.h \
-    #multilateration.h
+    multilateration.h
 
 FORMS    += mainwindow.ui \
     mapsviewer.ui

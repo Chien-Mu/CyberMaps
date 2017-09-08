@@ -28,7 +28,7 @@ private:
     QMutex mutex;
 
     void site_survery_filter(QString msg, QString device_mac);
-    void rssi2distance(int router_index);
+    float rssi2distance(int router_index);
     void inputArrayMap(QString linkHostMAC, QString &value, bool isServer = false);
     void clearArray(int size);
 
