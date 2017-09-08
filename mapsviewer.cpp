@@ -13,7 +13,7 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     connect(ui->btn_sw_dD,SIGNAL(clicked()),this,SLOT(btn_sw_dD_Click()));
     connect(ui->btn_sw_LR,SIGNAL(clicked()),this,SLOT(btn_sw_LR_Click()));
     mag = 2.0f/10.0f;
-    ui->VS_zoom->setRange(1,50);
+    ui->VS_zoom->setRange(1,100);
     connect(ui->VS_zoom,SIGNAL(valueChanged(int)),this,SLOT(changZoom(int)));
     ui->VS_zoom->setValue(5);
 
@@ -103,6 +103,7 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
 
     //clear
     QVector<vWAP>().swap(this->waps);
+    QVector<vlastDistance>().swap(this->lastDist);
 
     //copy to vWAP
     vWAP wap;
