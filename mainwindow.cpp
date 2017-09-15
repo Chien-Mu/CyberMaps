@@ -6,9 +6,9 @@ using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
-    //datareader = new dataReader;
+    datareader = new dataReader;
 
-
+/*
     const unsigned wap_size = 4;
     wap = new WAP[wap_size];
     ant = new Antenna[wap_size*1];
@@ -188,7 +188,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     view = new MapsViewer;
     view->show();
     view->drawWAPs(wap, wap_size, lastDist, lastDist_size);
-
+*/
 }
 
 MainWindow::~MainWindow()
@@ -198,5 +198,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    //this->datareader->start();
+    this->datareader->start();
 }

@@ -20,6 +20,9 @@ public:
     bool isStop;
     void test();
 
+public slots:
+    void setRealDistance(float ab, float bc, float ca);
+
 private:
     int _time_delay;
     QProcess *proc;
@@ -45,10 +48,10 @@ private:
     unsigned dist_size;
     unsigned oarn;
     unsigned owdn;
+    float ab,bc,ca; //Real distance set Value
 
 signals:
 
-public slots:
 };
 
 #endif // DATAREADER_H

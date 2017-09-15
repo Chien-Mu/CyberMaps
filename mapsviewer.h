@@ -4,9 +4,11 @@
 #include <QWidget>
 #include <QToolBar>
 #include <QPen>
+#include <QMenuBar>
 #include <QDebug>
 
 #include "cyberglobal.h"
+#include "config.h"
 
 /* RSSI,Received signal strength indication */
 struct vRSSI{
@@ -83,6 +85,10 @@ protected:
 private:
     //ui
     Ui::MapsViewer *ui;
+    Config *config;
+    QMenuBar *menubar;
+    QMenu *menu[2];
+    QAction *act;
 
     //螢幕
     float screenRate;
@@ -104,10 +110,14 @@ private:
     QVector<vlastDistance> lastDist;
 
 private slots:
+    void triggerMenu(QAction *act);
     void btn_sw_dD_Click();
     void btn_sw_style_Click();
     void changZoom(int value);
     void btn_sw_LR_Click();
+
+signals:
+    void throwSetValue(float ab, float bc, float ca);
 };
 
 #endif // MAPSVIEWER_H

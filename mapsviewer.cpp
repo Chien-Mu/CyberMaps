@@ -9,6 +9,12 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     ui->setupUi(this);
 
     //ui
+    config = new Config;
+    menu[0] = new QMenu("Config");
+    menu[0]->addAction("Setting");
+    menubar = new QMenuBar(this);
+    menubar->addMenu(menu[0]);
+    connect(this->menu[0],SIGNAL(triggered(QAction*)),this,SLOT(triggerMenu(QAction*)));
     connect(ui->btn_sw_style,SIGNAL(clicked()),this,SLOT(btn_sw_style_Click()));
     connect(ui->btn_sw_dD,SIGNAL(clicked()),this,SLOT(btn_sw_dD_Click()));
     connect(ui->btn_sw_LR,SIGNAL(clicked()),this,SLOT(btn_sw_LR_Click()));
@@ -29,12 +35,22 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     ui->btn_sw_style->setEnabled(false);
     this->estyle = (eStyle)(0);
     this->isLauch = false;
+
+    //config reture value
+    connect(config,SIGNAL(throwSetValue(float,float,float)),this,SIGNAL(throwSetValue(float,float,float)));
 }
 
 void MapsViewer::changZoom(int value){
     pixelRate = mag * (float)value;
     ui->la_zoom->setText(QString::number(pixelRate) + "x");
     this->update();
+}
+
+void MapsViewer::triggerMenu(QAction *act){
+    if(act->text() == "Setting"){
+        config->show();
+        config->raise();
+    }
 }
 
 void MapsViewer::btn_sw_LR_Click(){
