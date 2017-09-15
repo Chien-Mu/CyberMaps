@@ -41,10 +41,12 @@ struct vWAP{
     unsigned antenna_size;
     QVector<vAntenna> ant;
     QPointF wapXY;
+    QPointF realWapXY;
 };
 
 struct vlastDistance{
     float distance;
+    float realDistance;
     unsigned index1;
     unsigned index2;
 };

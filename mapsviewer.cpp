@@ -113,8 +113,10 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
     for(unsigned i=0;i<waps_size;i++){
         wap.ssid = waps[i].ssid;
         wap.index = waps[i].index;
-        wap.wapXY.setX((int)(waps[i].wapX));
-        wap.wapXY.setY((int)(waps[i].wapY));
+        wap.wapXY.setX(waps[i].wapX);
+        wap.wapXY.setY(waps[i].wapY);
+        wap.realWapXY.setX(waps[i].realWapX);
+        wap.realWapXY.setY(waps[i].realWapY);
         wap.dist_size = waps[i].dist_size;
         wap.antenna_size = waps[i].antenna_size;
         this->waps.push_back(wap);
@@ -143,6 +145,7 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
     vlastDistance vdist;
     for(unsigned i=0;i<lastDist_size;i++){
         vdist.distance = lastDist[i].distance;
+        vdist.realDistance = lastDist[i].realDistance;
         vdist.index1 = lastDist[i].index1;
         vdist.index2 = lastDist[i].index2;
         this->lastDist.push_back(vdist);
@@ -162,9 +165,17 @@ void MapsViewer::paintEvent(QPaintEvent *event){
 
     //draw Distance
     if(this->isVDist){
-        QPointF p1,p2,ptext;
+        QPointF p1,p2,r1,r2,ptext;
         QString str;
         for(int i=0;i<lastDist.size();i++){
+            pen.setBrush(Qt::green);
+            painter.setPen(pen);
+            r1.setX(waps[lastDist[i].index1].realWapXY.x()*pixelRate+Woutset);
+            r1.setY(waps[lastDist[i].index1].realWapXY.y()*pixelRate+Houtset);
+            r2.setX(waps[lastDist[i].index2].realWapXY.x()*pixelRate+Woutset);
+            r2.setY(waps[lastDist[i].index2].realWapXY.y()*pixelRate+Houtset);
+            painter.drawLine(r1,r2);
+
             pen.setBrush(Qt::yellow);
             painter.setPen(pen);
             p1.setX(waps[lastDist[i].index1].wapXY.x()*pixelRate+Woutset);

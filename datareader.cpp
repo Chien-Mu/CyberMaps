@@ -259,6 +259,8 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
             wap[i].ssid = ids[i];
             wap[i].wapX = 0.0;
             wap[i].wapY = 0.0;
+            wap[i].realWapX = 0.0;
+            wap[i].realWapY = 0.0;
             wap[i].dist_size = owdn;
             wap[i].dist = &dist[distCount];
             distCount += owdn;

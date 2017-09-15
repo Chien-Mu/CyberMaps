@@ -18,7 +18,7 @@ struct RSSI{
 struct Distance{
     SSID ssid;                      //Source device ID
     unsigned ssid_index;            //Source device tag
-    float distance;
+    float distance;                 //計算結果距離
 };
 
 struct Launch{
@@ -41,12 +41,15 @@ struct WAP{
     Antenna *ant;
     unsigned dist_size;
     Distance *dist;
-    float wapX;
+    float wapX;                     //計算結果位置
     float wapY;
+    float realWapX;                 //實際位置
+    float realWapY;
 };
 
 struct lastDistance{
-    float distance;
+    float distance;                 //從多根天線計算結果距離
+    float realDistance;             //實際距離
     unsigned index1;
     unsigned index2;
 };
