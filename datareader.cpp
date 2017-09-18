@@ -89,10 +89,12 @@ float dataReader::rssi2distance(int router_index)
         qDebug()<<"rssi_2:"<< rssi_2;
 
         float distance_1 = exp((rssi_1+32.851)/(-8.782));
-        float distance_2 = exp((rssi_2+28.858)/(-7.27));
+        //float distance_2 = exp((rssi_2+28.858)/(-7.27));
 
+        //float distance_2 = exp((rssi_2+19.141)/(-9.64));
+        float distance_2 = exp((rssi_2+15.99)/(-10.87));
 
-        return distance_1;
+        return distance_2;
 
 
 
