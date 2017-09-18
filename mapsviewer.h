@@ -30,7 +30,7 @@ struct vLaunch{
 struct vAntenna{
     unsigned rssis_size;
     QVector<vRSSI> rssis;
-    QPointF antXY;
+    QPoint antXY;
     vLaunch lau;
 };
 
@@ -42,8 +42,8 @@ struct vWAP{
     QVector<vDistance> dist;
     unsigned antenna_size;
     QVector<vAntenna> ant;
-    QPointF wapXY;
-    QPointF realWapXY;
+    QPoint wapXY;
+    QPoint realWapXY;
 };
 
 struct vlastDistance{

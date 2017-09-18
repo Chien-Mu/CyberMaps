@@ -181,25 +181,25 @@ void MapsViewer::paintEvent(QPaintEvent *event){
 
     //draw Distance
     if(this->isVDist){
-        QPointF p1,p2,r1,r2,ptext;
+        QPoint p1,p2,r1,r2,ptext;
         QString str;
         for(int i=0;i<lastDist.size();i++){
             pen.setBrush(Qt::gray);
             pen.setStyle(Qt::DotLine);
             painter.setPen(pen);
-            r1.setX(waps[lastDist[i].index1].realWapXY.x()*pixelRate+Woutset);
-            r1.setY(waps[lastDist[i].index1].realWapXY.y()*pixelRate+Houtset);
-            r2.setX(waps[lastDist[i].index2].realWapXY.x()*pixelRate+Woutset);
-            r2.setY(waps[lastDist[i].index2].realWapXY.y()*pixelRate+Houtset);
+            r1.setX((int)waps[lastDist[i].index1].realWapXY.x()*pixelRate+Woutset);
+            r1.setY((int)waps[lastDist[i].index1].realWapXY.y()*pixelRate+Houtset);
+            r2.setX((int)waps[lastDist[i].index2].realWapXY.x()*pixelRate+Woutset);
+            r2.setY((int)waps[lastDist[i].index2].realWapXY.y()*pixelRate+Houtset);
             painter.drawLine(r1,r2);
 
             pen.setBrush(Qt::yellow);
             pen.setStyle(Qt::SolidLine);
             painter.setPen(pen);
-            p1.setX(waps[lastDist[i].index1].wapXY.x()*pixelRate+Woutset);
-            p1.setY(waps[lastDist[i].index1].wapXY.y()*pixelRate+Houtset);
-            p2.setX(waps[lastDist[i].index2].wapXY.x()*pixelRate+Woutset);
-            p2.setY(waps[lastDist[i].index2].wapXY.y()*pixelRate+Houtset);
+            p1.setX((int)waps[lastDist[i].index1].wapXY.x()*pixelRate+Woutset);
+            p1.setY((int)waps[lastDist[i].index1].wapXY.y()*pixelRate+Houtset);
+            p2.setX((int)waps[lastDist[i].index2].wapXY.x()*pixelRate+Woutset);
+            p2.setY((int)waps[lastDist[i].index2].wapXY.y()*pixelRate+Houtset);
             painter.drawLine(p1,p2);
 
             ptext.setX((p1.x()+p2.x()) / 2.0);
@@ -227,10 +227,10 @@ void MapsViewer::paintEvent(QPaintEvent *event){
 
                         if(estyle == Gradient){
                             //漸層
-                            QRadialGradient gradient(QPointF(waps[i].wapXY.x()*pixelRate+Woutset,
+                            QRadialGradient gradient(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                                             waps[i].wapXY.y()*pixelRate+Houtset),
                                                      (int)(range),
-                                                     QPointF(waps[i].wapXY.x()*pixelRate+Woutset,
+                                                     QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                                             waps[i].wapXY.y()*pixelRate+Houtset));
                             gradient.setColorAt(0, QColor::fromRgbF(style[index].R/255.0,
                                                                     style[index].G/255.0,
@@ -249,7 +249,7 @@ void MapsViewer::paintEvent(QPaintEvent *event){
                         pen.setBrush(QColor(style[index].R,style[index].G,style[index].B));
                         pen.setWidth(1);
                         painter.setPen(pen);
-                        painter.drawEllipse(QPointF(waps[i].wapXY.x()*pixelRate+Woutset,
+                        painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                                    waps[i].wapXY.y()*pixelRate+Houtset),
                                             (int)(range),
                                             (int)(range));
@@ -259,10 +259,10 @@ void MapsViewer::paintEvent(QPaintEvent *event){
                     range = waps[i].ant[j].lau.dBm*pixelRate;
                     if(estyle == Gradient){
                         //漸層
-                        QRadialGradient gradient(QPointF(waps[i].wapXY.x()*pixelRate+Woutset,
+                        QRadialGradient gradient(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                                         waps[i].wapXY.y()*pixelRate+Houtset),
                                                  (int)(range),
-                                                 QPointF(waps[i].wapXY.x()*pixelRate+Woutset,
+                                                 QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                                         waps[i].wapXY.y()*pixelRate+Houtset));
                         gradient.setColorAt(0, QColor::fromRgbF(style[i].R/255.0,
                                                                 style[i].G/255.0,
@@ -281,7 +281,7 @@ void MapsViewer::paintEvent(QPaintEvent *event){
                     pen.setBrush((QColor(style[i].R,style[i].G,style[i].B)));
                     pen.setWidth(1);
                     painter.setPen(pen);
-                    painter.drawEllipse(QPointF(waps[i].wapXY.x()*pixelRate+Woutset,
+                    painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                                waps[i].wapXY.y()*pixelRate+Houtset),
                                         (int)(range),
                                         (int)(range));
@@ -298,17 +298,17 @@ void MapsViewer::paintEvent(QPaintEvent *event){
         if(this->isVDist){
             pen.setWidth(2);
             painter.setPen(pen); //為了在圓周畫線
-            painter.drawEllipse(QPointF(waps[i].realWapXY.x()*pixelRate+Woutset,
+            painter.drawEllipse(QPoint(waps[i].realWapXY.x()*pixelRate+Woutset,
                                         waps[i].realWapXY.y()*pixelRate+Houtset),5,5);
         }
         painter.setPen(Qt::NoPen);
-        painter.drawEllipse(QPointF(waps[i].wapXY.x()*pixelRate+Woutset,
+        painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                    waps[i].wapXY.y()*pixelRate+Houtset),5,5);
 
         pen.setBrush(Qt::white);
         pen.setWidth(3);
         painter.setPen(pen);
-        painter.drawText(QPointF(waps[i].wapXY.x()*pixelRate+Woutset -10,
+        painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate+Woutset -10,
                                 waps[i].wapXY.y()*pixelRate+Houtset +25),
                          waps[i].ssid);
 
@@ -318,7 +318,7 @@ void MapsViewer::paintEvent(QPaintEvent *event){
             for(int j=0;j<waps[i].ant.size();j++){
                 //顯示天線發射強度
                 dD = QString::number(waps[i].ant[j].lau.dBm) + " -dBm";
-                painter.drawText(QPointF(waps[i].wapXY.x()*pixelRate+Woutset - 10,
+                painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate+Woutset - 10,
                                         waps[i].wapXY.y()*pixelRate+Houtset + 40 + (j*40)),dD);
             }
         }
