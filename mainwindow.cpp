@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     wap[0].index = 0;
     wap[0].wapX = 0.0;
     wap[0].wapY = 0.0;
+    wap[0].realWapX = 0.0;
+    wap[0].realWapY = 0.0;
     wap[0].dist_size = 3;
     dist[0].ssid = ids[1]; //B
     dist[0].ssid_index = 1;
@@ -63,8 +65,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     wap[1].ssid = ids[1];  //B
     wap[1].index = 1;
-    wap[1].wapX = 80.0;
+    wap[1].wapX = 0.0;
     wap[1].wapY = 0.0;
+    wap[1].realWapX = 0.0;
+    wap[1].realWapY = 0.0;
     wap[1].dist_size = 3;
     dist[3].ssid = ids[0]; //A
     dist[3].ssid_index = 0;
@@ -95,8 +99,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     wap[2].ssid = ids[2];  //C
     wap[2].index = 2;
-    wap[2].wapX = 80.0;
-    wap[2].wapY = 80.0;
+    wap[2].wapX = 0.0;
+    wap[2].wapY = 0.0;
+    wap[2].realWapX = 0.0;
+    wap[2].realWapY = 0.0;
     wap[2].dist_size = 3;
     dist[6].ssid = ids[0]; //A
     dist[6].ssid_index = 0;
@@ -129,6 +135,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     wap[3].index = 3;
     wap[3].wapX = 0.0;
     wap[3].wapY = 80.0;
+    wap[3].realWapX = 0.0;
+    wap[3].realWapY = 90.0;
     wap[3].dist_size = 3;
     dist[9].ssid = ids[0]; //A
     dist[9].ssid_index = 0;
@@ -157,21 +165,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ant[3].lau = lau;
     wap[3].ant = &ant[3];
 
-    //referanceNode(wap_size, wap);
-
-    //存入最後計算結果
+    //最後距離計算結果
     const unsigned lastDist_size = 3;
     lastDistance lastDist[lastDist_size];
     lastDist[0].distance = 80;
+    lastDist[0].realDistance = 90;
     lastDist[0].index1 = 0;
     lastDist[0].index2 = 1;
     lastDist[1].distance = 80;
-    lastDist[0].index1 = 0;
-    lastDist[0].index2 = 1;
+    lastDist[1].realDistance = 90;
+    lastDist[1].index1 = 2;
+    lastDist[1].index2 = 1;
     lastDist[2].distance = 113.137f;
+    lastDist[2].realDistance = 127.279f;
     lastDist[2].index1 = 2;
     lastDist[2].index2 = 0;
 
+    //計算WAP座標
+    referanceNode(wap_size, wap, lastDist);
+
+    //show
     view = new MapsViewer;
     view->show();
     view->drawWAPs(wap, wap_size, lastDist, lastDist_size);

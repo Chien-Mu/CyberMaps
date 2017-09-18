@@ -17,9 +17,12 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps, lastDistance *lastD
     {
         if(waps[1].ant[0].rssis[i].ssid_index==0)
         {
-            //waps[1].wapX = waps[1].ant[0].rssis[i].distance;
-            waps[1].wapX = lastDist[0].distance;;   //phymon:use ant 1 to cal
+            waps[1].wapX = lastDist[0].distance;  //phymon:use ant 1 to cal
             waps[1].wapY = 0;
+
+            //levy
+            waps[1].realWapX = lastDist[0].realDistance;
+            waps[1].realWapY = 0;
         }
     }
 
@@ -78,12 +81,27 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps, lastDistance *lastD
 
     cosine = (pow(d01,2) + pow(d02,2) - pow(d12,2))/(2*d01*d02);
     alpha = acos(cosine);
+    qDebug() << cosine << acos(cosine);  //2.25925 nan
 
     waps[2].wapX = (float)(d02*cos(alpha));
     waps[2].wapY = (float)(d02*sin(alpha));
+    qDebug() << cos(alpha) << d02 << alpha; //nan 20.1087 nan
+    qDebug() << sin(alpha) << acos(cosine) << sin(alpha); //nan nan nan
 
     qDebug()<< "C.x = " << waps[2].wapX;
     qDebug()<< "C.y = " << waps[2].wapY;
+
+
+    //levy
+    d01 = lastDist[0].realDistance;
+    d02 = lastDist[2].realDistance;
+    d12 = lastDist[1].realDistance;
+
+    cosine = (pow(d01,2) + pow(d02,2) - pow(d12,2))/(2*d01*d02);
+    alpha = acos(cosine);
+    waps[2].realWapX = (float)(d02*cos(alpha));
+    waps[2].realWapY = (float)(d02*sin(alpha));
+
 
 /*
 

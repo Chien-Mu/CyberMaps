@@ -9,6 +9,12 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     ui->setupUi(this);
 
     //ui
+    config = new Config;
+    menu[0] = new QMenu("Config");
+    menu[0]->addAction("Setting");
+    menubar = new QMenuBar(this);
+    menubar->addMenu(menu[0]);
+    connect(this->menu[0],SIGNAL(triggered(QAction*)),this,SLOT(triggerMenu(QAction*)));
     connect(ui->btn_sw_style,SIGNAL(clicked()),this,SLOT(btn_sw_style_Click()));
     connect(ui->btn_sw_dD,SIGNAL(clicked()),this,SLOT(btn_sw_dD_Click()));
     connect(ui->btn_sw_LR,SIGNAL(clicked()),this,SLOT(btn_sw_LR_Click()));
@@ -29,12 +35,22 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     ui->btn_sw_style->setEnabled(false);
     this->estyle = (eStyle)(0);
     this->isLauch = false;
+
+    //config reture value
+    connect(config,SIGNAL(throwSetValue(float,float,float)),this,SIGNAL(throwSetValue(float,float,float)));
 }
 
 void MapsViewer::changZoom(int value){
     pixelRate = mag * (float)value;
     ui->la_zoom->setText(QString::number(pixelRate) + "x");
     this->update();
+}
+
+void MapsViewer::triggerMenu(QAction *act){
+    if(act->text() == "Setting"){
+        config->show();
+        config->raise();
+    }
 }
 
 void MapsViewer::btn_sw_LR_Click(){
@@ -113,8 +129,10 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
     for(unsigned i=0;i<waps_size;i++){
         wap.ssid = waps[i].ssid;
         wap.index = waps[i].index;
-        wap.wapXY.setX((int)(waps[i].wapX));
-        wap.wapXY.setY((int)(waps[i].wapY));
+        wap.wapXY.setX(waps[i].wapX);
+        wap.wapXY.setY(waps[i].wapY);
+        wap.realWapXY.setX(waps[i].realWapX);
+        wap.realWapXY.setY(waps[i].realWapY);
         wap.dist_size = waps[i].dist_size;
         wap.antenna_size = waps[i].antenna_size;
         this->waps.push_back(wap);
@@ -143,6 +161,7 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
     vlastDistance vdist;
     for(unsigned i=0;i<lastDist_size;i++){
         vdist.distance = lastDist[i].distance;
+        vdist.realDistance = lastDist[i].realDistance;
         vdist.index1 = lastDist[i].index1;
         vdist.index2 = lastDist[i].index2;
         this->lastDist.push_back(vdist);
@@ -162,20 +181,35 @@ void MapsViewer::paintEvent(QPaintEvent *event){
 
     //draw Distance
     if(this->isVDist){
-        QPointF p1,p2,ptext;
+        QPoint p1,p2,r1,r2,ptext;
         QString str;
         for(int i=0;i<lastDist.size();i++){
-            pen.setBrush(Qt::yellow);
+            pen.setBrush(Qt::gray);
+            pen.setStyle(Qt::DotLine);
             painter.setPen(pen);
-            p1.setX(waps[lastDist[i].index1].wapXY.x()*pixelRate+Woutset);
-            p1.setY(waps[lastDist[i].index1].wapXY.y()*pixelRate+Houtset);
-            p2.setX(waps[lastDist[i].index2].wapXY.x()*pixelRate+Woutset);
-            p2.setY(waps[lastDist[i].index2].wapXY.y()*pixelRate+Houtset);
+            r1.setX((int)waps[lastDist[i].index1].realWapXY.x()*pixelRate+Woutset);
+            r1.setY((int)waps[lastDist[i].index1].realWapXY.y()*pixelRate+Houtset);
+            r2.setX((int)waps[lastDist[i].index2].realWapXY.x()*pixelRate+Woutset);
+            r2.setY((int)waps[lastDist[i].index2].realWapXY.y()*pixelRate+Houtset);
+            painter.drawLine(r1,r2);
+
+            pen.setBrush(Qt::yellow);
+            pen.setStyle(Qt::SolidLine);
+            painter.setPen(pen);
+            p1.setX((int)waps[lastDist[i].index1].wapXY.x()*pixelRate+Woutset);
+            p1.setY((int)waps[lastDist[i].index1].wapXY.y()*pixelRate+Houtset);
+            p2.setX((int)waps[lastDist[i].index2].wapXY.x()*pixelRate+Woutset);
+            p2.setY((int)waps[lastDist[i].index2].wapXY.y()*pixelRate+Houtset);
             painter.drawLine(p1,p2);
 
             ptext.setX((p1.x()+p2.x()) / 2.0);
             ptext.setY((p1.y()+p2.y()) / 2.0);
-            str = QString::number(lastDist[i].distance,'f',0) + "M";
+
+            //誤差率 = 誤差=( |理論-實驗|/理論 )*100% ,for Julia
+            float deviaiton = (qAbs(lastDist[i].realDistance - lastDist[i].distance) / lastDist[i].realDistance)*100;
+            str = QString::number(deviaiton,'f',0) + "% (" +
+                  QString::number(lastDist[i].distance,'g',4) + "/" +
+                  QString::number(lastDist[i].realDistance,'g',4) + "M)";
                   //+ "(" + QString::number(qSqrt(qPow(p1.x()-p2.x(),2) + qPow(p1.y()-p2.y(),2))) + ")";
             painter.drawText(ptext,str);
         }
@@ -260,9 +294,17 @@ void MapsViewer::paintEvent(QPaintEvent *event){
     QString dD;
     for(int i=0;i<waps.size();i++){
         painter.setBrush(QBrush(QColor(style[i].R, style[i].G, style[i].B),Qt::SolidPattern));
+
+        if(this->isVDist){
+            pen.setWidth(2);
+            painter.setPen(pen); //為了在圓周畫線
+            painter.drawEllipse(QPoint(waps[i].realWapXY.x()*pixelRate+Woutset,
+                                        waps[i].realWapXY.y()*pixelRate+Houtset),5,5);
+        }
         painter.setPen(Qt::NoPen);
         painter.drawEllipse(QPoint(waps[i].wapXY.x()*pixelRate+Woutset,
                                    waps[i].wapXY.y()*pixelRate+Houtset),5,5);
+
         pen.setBrush(Qt::white);
         pen.setWidth(3);
         painter.setPen(pen);

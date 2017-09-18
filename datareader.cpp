@@ -16,6 +16,7 @@ dataReader::dataReader(QObject *parent) : QThread(parent)
     ids = 0;
 
     view = new MapsViewer;
+    connect(view,SIGNAL(throwSetValue(float,float,float)),this,SLOT(setRealDistance(float,float,float)));
     view->show();
 }
 
@@ -134,8 +135,6 @@ void dataReader::run()
     QString ip = "10.10.10.101";
     int time_delay = 1000;
 
-
-
     while(!isStop)
     {
         proc = new QProcess;
@@ -190,6 +189,10 @@ void dataReader::run()
 
         }
 
+        //set real distance
+        last_dist[0].realDistance = ab;
+        last_dist[1].realDistance = bc;
+        last_dist[2].realDistance = ca;
 
 
         //qDebug()<<"input_msg:"<<input_msg;
@@ -259,6 +262,8 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
             wap[i].ssid = ids[i];
             wap[i].wapX = 0.0;
             wap[i].wapY = 0.0;
+            wap[i].realWapX = 0.0;
+            wap[i].realWapY = 0.0;
             wap[i].dist_size = owdn;
             wap[i].dist = &dist[distCount];
             distCount += owdn;
@@ -348,6 +353,12 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
         }
     }
 */
+}
+
+void dataReader::setRealDistance(float ab, float bc, float ca){
+    this->ab = ab;
+    this->bc = bc;
+    this->ca = ca;
 }
 
 void dataReader::clearArray(int size){
