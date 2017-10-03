@@ -92,8 +92,8 @@ float dataReader::rssi2distance(int router_index)
         //float distance_2 = exp((rssi_2+28.858)/(-7.27));
 
         //float distance_2 = exp((rssi_2+19.141)/(-9.64));
-        float distance_2 = exp((rssi_2+15.99)/(-10.87));
-
+        //float distance_2 = exp((rssi_2+15.99)/(-10.87));
+        float distance_2 = exp((rssi_2+16.561)/(-9.87));
         return distance_2;
 
 

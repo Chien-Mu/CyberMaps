@@ -19,7 +19,7 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     connect(ui->btn_sw_dD,SIGNAL(clicked()),this,SLOT(btn_sw_dD_Click()));
     connect(ui->btn_sw_LR,SIGNAL(clicked()),this,SLOT(btn_sw_LR_Click()));
     mag = 2.0f/10.0f;
-    ui->VS_zoom->setRange(1,100);
+    ui->VS_zoom->setRange(1,200);
     connect(ui->VS_zoom,SIGNAL(valueChanged(int)),this,SLOT(changZoom(int)));
     ui->VS_zoom->setValue(5);
 
@@ -310,7 +310,7 @@ void MapsViewer::paintEvent(QPaintEvent *event){
         painter.setPen(pen);
         painter.drawText(QPoint(waps[i].wapXY.x()*pixelRate+Woutset -10,
                                 waps[i].wapXY.y()*pixelRate+Houtset +25),
-                         waps[i].ssid);
+                         waps[i].ssid.right(2));
 
         if(isLauch && !isVDist){
             pen.setBrush(QColor(style[i].R, style[i].G, style[i].B));
