@@ -6,10 +6,11 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = CyberMaps
 TEMPLATE = app
+QMAKE_CXXFLAGS += -Wno-inconsistent-missing-override
 
 
 SOURCES += main.cpp\
@@ -18,14 +19,16 @@ SOURCES += main.cpp\
     cyberglobal.cpp \
     datareader.cpp \
     multilateration.cpp \
-    config.cpp
+    config.cpp \
+    QCustomPlot/qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
     mapsviewer.h \
     cyberglobal.h \
     datareader.h \
     multilateration.h \
-    config.h
+    config.h \
+    QCustomPlot/qcustomplot.h
 
 FORMS    += mainwindow.ui \
     mapsviewer.ui \
