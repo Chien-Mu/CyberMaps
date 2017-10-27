@@ -9,12 +9,15 @@
 
 #include "cyberglobal.h"
 #include "config.h"
+#include "QCustomPlot/qcustomplot.h"
+#include <QTime>
 
 /* RSSI,Received signal strength indication */
 struct vRSSI{
     QString ssid;                   //Source device ID
     unsigned ssid_index;            //Source device tag
     float dBm;                      //Received signal strength
+    QTime time;                     //接收到的計時時間
 };
 
 struct vDistance{
@@ -51,6 +54,15 @@ struct vlastDistance{
     float realDistance;
     unsigned index1;
     unsigned index2;
+    float dBm;                      //拿來計算的rssi
+    QTime time;                     //接收到的計時時間
+};
+
+struct PlotData{
+    QVector<double> x;              //key(time)
+    QVector<double> y;              //value(dbm)
+    QVector<float> distance;
+    QVector<float> realDistance;
 };
 
 struct vStyle{
@@ -89,6 +101,14 @@ private:
     QMenuBar *menubar;
     QMenu *menu[2];
     QAction *act;
+
+    //plot
+    QCustomPlot *plot;
+    QCustomPlot *plot2;
+    QCustomPlot *plot3;
+    PlotData plotData;
+    PlotData plot2Data;
+    PlotData plot3Data;
 
     //螢幕
     float screenRate;

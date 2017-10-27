@@ -23,8 +23,11 @@
    </item>
    <item row="2" column="2">
     <widget class="QLineEdit" name="LE_ca">
+     <property name="text">
+      <string>0</string>
+     </property>
      <property name="cursorPosition">
-      <number>0</number>
+      <number>1</number>
      </property>
     </widget>
    </item>
@@ -49,7 +52,11 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="QLineEdit" name="LE_ab"/>
+    <widget class="QLineEdit" name="LE_ab">
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0">
     <spacer name="horizontalSpacer">
@@ -69,8 +76,11 @@
    </item>
    <item row="1" column="2">
     <widget class="QLineEdit" name="LE_bc">
+     <property name="text">
+      <string>0</string>
+     </property>
      <property name="cursorPosition">
-      <number>0</number>
+      <number>1</number>
      </property>
     </widget>
    </item>

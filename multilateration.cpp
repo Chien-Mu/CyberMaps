@@ -83,8 +83,14 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps, lastDistance *lastD
     alpha = acos(cosine);
     qDebug() << cosine << acos(cosine);  //2.25925 nan
 
-    waps[2].wapX = (float)(d02*cos(alpha));
-    waps[2].wapY = (float)(d02*sin(alpha));
+    //levy
+    float wapX = (float)(d02*cos(alpha));
+    float wapY = (float)(d02*sin(alpha));
+    if(wapX > 0)
+        waps[2].wapX = wapX;
+    if(wapY > 0)
+        waps[2].wapY = wapY;
+
     qDebug() << cos(alpha) << d02 << alpha; //nan 20.1087 nan
     qDebug() << sin(alpha) << acos(cosine) << sin(alpha); //nan nan nan
 
@@ -99,9 +105,17 @@ void referanceNode(const unsigned numberOfDevice, WAP *waps, lastDistance *lastD
 
     cosine = (pow(d01,2) + pow(d02,2) - pow(d12,2))/(2*d01*d02);
     alpha = acos(cosine);
-    waps[2].realWapX = (float)(d02*cos(alpha));
-    waps[2].realWapY = (float)(d02*sin(alpha));
+    float realWapX = (float)(d02*cos(alpha));
+    float realWapY = (float)(d02*sin(alpha));
 
+    //levy
+    if(realWapX > 0)
+        waps[2].realWapX = realWapX;
+    if(realWapY > 0)
+        waps[2].realWapY = realWapY;
+
+    qDebug()<< "C.realWapX = " << waps[2].realWapX;
+    qDebug()<< "C.realWapX = " << waps[2].realWapX;
 
 /*
 

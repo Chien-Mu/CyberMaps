@@ -13,6 +13,7 @@ struct RSSI{
     SSID ssid;                      //Source device ID
     unsigned ssid_index;            //Source device tag
     float dBm;                      //Received signal strength
+    int time;                       //接收到的計時時間
 };
 
 struct Distance{
@@ -52,6 +53,8 @@ struct lastDistance{
     float realDistance;             //實際距離
     unsigned index1;
     unsigned index2;
+    float dBm;                      //拿來計算的rssi
+    int time;                       //接收到的計時時間
 };
 
 

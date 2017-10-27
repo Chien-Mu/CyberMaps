@@ -29,10 +29,11 @@ private:
     QByteArray input_msg;
     QString _ip;
     QMutex mutex;
+    QTime time;
 
-    void site_survery_filter(QString msg, QString device_mac);
-    float rssi2distance(int router_index);
-    void inputArrayMap(QString linkHostMAC, QString &value, bool isServer = false);
+    void site_survery_filter(QString msg, int currentTime, QString device_mac);
+    void rssi2distance(int router_index, lastDistance &ref);
+    void inputArrayMap(QString linkHostMAC, QString &value, int currentTime,bool isServer = false);
     void clearArray(int size);
 
     WAP *wap;

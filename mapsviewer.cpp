@@ -31,13 +31,27 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     this->style = 0;
     this->isSetting = false;
     this->isVDist = true;
+    ui->la_sw_dD->setText("Distance");
     ui->btn_sw_LR->setEnabled(false);
     ui->btn_sw_style->setEnabled(false);
     this->estyle = (eStyle)(0);
     this->isLauch = false;
 
-    //config reture value
+    //config return value
     connect(config,SIGNAL(throwSetValue(float,float,float)),this,SIGNAL(throwSetValue(float,float,float)));
+
+    //plot
+    this->plot = ui->plot;
+    this->plot2 = ui->plot_2;
+    this->plot3 = ui->plot_3;
+    this->plot->addGraph();
+    this->plot2->addGraph();
+    this->plot3->addGraph();
+    this->plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
+    timeTicker->setTimeFormat("%h:%m:%s");
+    this->plot->xAxis->setTicker(timeTicker);
+    this->plot->xAxis->ticker()->setTickCount(3);
 }
 
 void MapsViewer::changZoom(int value){
@@ -150,6 +164,7 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
             this->waps[i].ant.push_back(ant);
             for(unsigned k=0;k<waps[i].ant[j].rssis_size;k++){
                 rssi.dBm = waps[i].ant[j].rssis[k].dBm;
+                rssi.time = QTime::fromMSecsSinceStartOfDay(waps[i].ant[j].rssis[k].time);
                 rssi.ssid = waps[i].ant[j].rssis[k].ssid;
                 rssi.ssid_index = waps[i].ant[j].rssis[k].ssid_index;
                 this->waps[i].ant[j].rssis.push_back(rssi);
@@ -164,8 +179,33 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
         vdist.realDistance = lastDist[i].realDistance;
         vdist.index1 = lastDist[i].index1;
         vdist.index2 = lastDist[i].index2;
+        vdist.dBm = lastDist[i].dBm;
+        vdist.time = QTime::fromMSecsSinceStartOfDay(lastDist[i].time);
         this->lastDist.push_back(vdist);
+
+        if(i==0){
+            this->plotData.x.push_back(lastDist[i].time/1000.0);
+            this->plotData.y.push_back(lastDist[i].dBm);
+            this->plotData.distance.push_back(lastDist[i].distance);
+            this->plotData.realDistance.push_back(lastDist[i].realDistance);
+        }else if(i==1){
+            this->plot2Data.x.push_back(lastDist[i].time/1000.0);
+            this->plot2Data.y.push_back(lastDist[i].dBm);
+            this->plot2Data.distance.push_back(lastDist[i].distance);
+            this->plot2Data.realDistance.push_back(lastDist[i].realDistance);
+        }else if(i==2){
+            this->plot3Data.x.push_back(lastDist[i].time/1000.0);
+            this->plot3Data.y.push_back(lastDist[i].dBm);
+            this->plot3Data.distance.push_back(lastDist[i].distance);
+            this->plot3Data.realDistance.push_back(lastDist[i].realDistance);
+        }
     }
+
+    //plot
+    plot->graph(0)->setData(this->plotData.x, this->plotData.y);
+    plot2->graph(0)->setData(this->plot2Data.x, this->plot2Data.y);
+    plot3->graph(0)->setData(this->plot3Data.x, this->plot3Data.y);
+    this->plot->graph(0)->rescaleAxes(false);
 
     this->isSetting = false;
     this->update();
@@ -177,7 +217,8 @@ void MapsViewer::paintEvent(QPaintEvent *event){
     if(waps.size() <= 0 || this->isSetting)
         return;
 
-    QPainter painter(this);
+    QPainter painter;
+    painter.begin(this);
 
     //draw Distance
     if(this->isVDist){
@@ -205,13 +246,15 @@ void MapsViewer::paintEvent(QPaintEvent *event){
             ptext.setX((p1.x()+p2.x()) / 2.0);
             ptext.setY((p1.y()+p2.y()) / 2.0);
 
-            //誤差率 = 誤差=( |理論-實驗|/理論 )*100% ,for Julia
-            float deviaiton = (qAbs(lastDist[i].realDistance - lastDist[i].distance) / lastDist[i].realDistance)*100;
-            str = QString::number(deviaiton,'f',0) + "% (" +
-                  QString::number(lastDist[i].distance,'g',4) + "/" +
-                  QString::number(lastDist[i].realDistance,'g',4) + "M)";
-                  //+ "(" + QString::number(qSqrt(qPow(p1.x()-p2.x(),2) + qPow(p1.y()-p2.y(),2))) + ")";
-            painter.drawText(ptext,str);
+            if(lastDist[i].realDistance != 0){
+                //誤差率 = 誤差=( |理論-實驗|/理論 )*100% ,for Julia
+                float deviaiton = (qAbs(lastDist[i].realDistance - lastDist[i].distance) / lastDist[i].realDistance)*100;
+                str = QString::number(deviaiton,'f',0) + "% (" +
+                        QString::number(lastDist[i].distance,'g',4) + "/" +
+                        QString::number(lastDist[i].realDistance,'g',4) + "M)";
+                //+ "(" + QString::number(qSqrt(qPow(p1.x()-p2.x(),2) + qPow(p1.y()-p2.y(),2))) + ")";
+                painter.drawText(ptext,str);
+            }
         }
     }else{
         //draw dBm
@@ -338,6 +381,11 @@ void MapsViewer::paintEvent(QPaintEvent *event){
         painter.drawText(standard, this->height()-35,"10(M)");
     else
         painter.drawText(standard, this->height()-35,"10(-dBm)");
+
+    painter.end();
+
+    //plot
+    plot->replot();
 }
 
 MapsViewer::~MapsViewer()

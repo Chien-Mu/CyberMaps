@@ -14,6 +14,9 @@ dataReader::dataReader(QObject *parent) : QThread(parent)
     dist = 0;
     rssi = 0;
     ids = 0;
+    this->ab = 0;
+    this->bc = 0;
+    this->ca = 0;
 
     view = new MapsViewer;
     connect(view,SIGNAL(throwSetValue(float,float,float)),this,SLOT(setRealDistance(float,float,float)));
@@ -27,7 +30,7 @@ void dataReader::test()
 
 }
 
-void dataReader::site_survery_filter(QString msg, QString device_mac)
+void dataReader::site_survery_filter(QString msg, int currentTime, QString device_mac)
 {
     QStringList site_survery_list = msg.split("\n");
     int router_count = site_survery_list.size();
@@ -44,6 +47,7 @@ void dataReader::site_survery_filter(QString msg, QString device_mac)
                 float rssi = 0-(rssi_fil[1].mid(0,2)).toFloat();
                 qDebug()<<"rssi_3"<< rssi;
                 wap[1].ant[0].rssis[0].dBm = rssi;
+                wap[1].ant[0].rssis[0].time = currentTime;
             }
             break;
         }
@@ -55,11 +59,11 @@ void dataReader::site_survery_filter(QString msg, QString device_mac)
 
 
 
-float dataReader::rssi2distance(int router_index)
+void dataReader::rssi2distance(int router_index, lastDistance &ref)
 {
     if(router_index == 0)
     {
-
+        //ab
         float rssi_1 = wap[0].ant[0].rssis[0].dBm;
         float rssi_2 = wap[0].ant[1].rssis[0].dBm;
 
@@ -67,12 +71,10 @@ float dataReader::rssi2distance(int router_index)
         float distance_2 = exp((rssi_2+28.858)/(-7.27));
         qDebug()<<"rssi_1:"<< rssi_2;
 
-
-
-        return distance_2;
-
-
-
+        //return distance_2;
+        ref.distance = distance_2;
+        ref.dBm = wap[0].ant[1].rssis[0].dBm;
+        ref.time = wap[0].ant[1].rssis[0].time;
     }
 
     //qDebug()<<"distance1"<< wap[0].ant[0].rssis[0].distance;
@@ -82,7 +84,7 @@ float dataReader::rssi2distance(int router_index)
 
     if(router_index == 1)
     {
-
+        //ac
         float rssi_1 = wap[0].ant[0].rssis[1].dBm;
         float rssi_2 = wap[0].ant[1].rssis[1].dBm;
 
@@ -94,10 +96,11 @@ float dataReader::rssi2distance(int router_index)
         //float distance_2 = exp((rssi_2+19.141)/(-9.64));
         //float distance_2 = exp((rssi_2+15.99)/(-10.87));
         float distance_2 = exp((rssi_2+16.561)/(-9.87));
-        return distance_2;
 
-
-
+        //return distance_2;
+        ref.distance = distance_2;
+        ref.dBm = wap[0].ant[1].rssis[1].dBm;
+        ref.time = wap[0].ant[1].rssis[1].time;
     }
 
     //qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
@@ -105,7 +108,7 @@ float dataReader::rssi2distance(int router_index)
 
     if(router_index == 2)
     {
-
+        //bc
         float rssi_1 = wap[1].ant[0].rssis[0].dBm;
 
         qDebug()<<"rssi_3:"<< rssi_1;
@@ -114,15 +117,13 @@ float dataReader::rssi2distance(int router_index)
 
 
 
-        return distance_1;
-
-
+        //return distance_1;
+        ref.distance = distance_1;
+        ref.dBm = wap[1].ant[0].rssis[0].dBm;
+        ref.time = wap[1].ant[0].rssis[0].time;
     }
 
     //qDebug()<<"distance1"<< wap[0].ant[0].rssis[1].distance;
-
-
-
 }
 
 
@@ -136,6 +137,7 @@ void dataReader::run()
     isStop = false; //default
     QString ip = "10.10.10.101";
     int time_delay = 1000;
+    time.restart(); //default 計時
 
     while(!isStop)
     {
@@ -153,6 +155,7 @@ void dataReader::run()
             ;
         }
         QString input_msg = proc->readAll().data();
+        int currentTime = time.elapsed();
 
         proc->start("curl http://10.10.10.1/cgi-bin/apsurvey.cgi -u admin:admin");
         //proc->start("ifconfig");
@@ -167,34 +170,34 @@ void dataReader::run()
             ;
         }
         QString input_msg_2 = proc->readAll().data();
+        int currentTime_2 = time.elapsed();
 
 
 
         //QString input_msg = proc->readAll().data();
         qDebug()<<"input_msg:"<<input_msg;
         QString linkHostMAC = "00:66:66:66:66:66";
-        inputArrayMap(linkHostMAC, input_msg, true);
-        site_survery_filter(input_msg_2, "20");
+        inputArrayMap(linkHostMAC, input_msg, currentTime, true);
+        site_survery_filter(input_msg_2, currentTime_2, "20");
         lastDistance last_dist[3];
         last_dist[0].index1 = 0;
         last_dist[0].index2 = 1;
-        last_dist[1].index1 = 2;
-        last_dist[1].index2 = 1;
-        last_dist[2].index1 = 2;
-        last_dist[2].index2 = 0;
+        last_dist[1].index1 = 0;
+        last_dist[1].index2 = 2;
+        last_dist[2].index1 = 1;
+        last_dist[2].index2 = 2;
         for (int i=0; i<3; i++)
         {
-            last_dist[i].distance = rssi2distance(i);
+            rssi2distance(i,last_dist[i]);
             qDebug()<<last_dist[i].distance;
             qDebug()<<last_dist[i].index1;
             qDebug()<<last_dist[i].index2;
-
         }
 
         //set real distance
         last_dist[0].realDistance = ab;
-        last_dist[1].realDistance = bc;
-        last_dist[2].realDistance = ca;
+        last_dist[1].realDistance = ca;
+        last_dist[2].realDistance = bc;
 
 
         //qDebug()<<"input_msg:"<<input_msg;
@@ -207,11 +210,10 @@ void dataReader::run()
         //this->rssi2distance(1);
         referanceNode(wap_size, wap,last_dist);
         view->drawWAPs(wap,wap_size, last_dist, 3);
-
     }
 }
 
-void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServer){
+void dataReader::inputArrayMap(QString linkHostMAC , QString &value, int currentTime, bool isServer){
     //string split
     QStringList list = value.split("\n");
 
@@ -286,6 +288,7 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
                 rssiCount += oarn;
                 for(unsigned k=0 ; k<oarn ; k++){
                     wap[i].ant[j].rssis[k].dBm = 0.0;
+                    wap[i].ant[j].rssis[k].time = 0;
                     wap[i].ant[j].rssis[k].ssid = id_NULL;
                     wap[i].ant[j].rssis[k].ssid_index = 0;
                 }
@@ -305,6 +308,10 @@ void dataReader::inputArrayMap(QString linkHostMAC ,QString &value, bool isServe
                 two = list[j].indexOf('-',sem);
                 rssi[ i * (oarn * DEVICE_ANT) + j ].dBm = list[j].mid(one, sem-one).toFloat();
                 rssi[ i * (oarn * DEVICE_ANT) + (j+oarn) ].dBm = list[j].right(list[j].size() - two).toFloat();
+
+                //time
+                rssi[ i * (oarn * DEVICE_ANT) + j ].time = currentTime;
+                rssi[ i * (oarn * DEVICE_ANT) + (j+oarn) ].time = currentTime;
 
                 //ssid and ssid_index
                 for(unsigned k=0 ; k<wap_size ; k++)
