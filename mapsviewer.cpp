@@ -47,11 +47,100 @@ MapsViewer::MapsViewer(QWidget *parent) : QWidget(parent), ui(new Ui::MapsViewer
     this->plot->addGraph();
     this->plot2->addGraph();
     this->plot3->addGraph();
+    //----------------------plot----------------------
+    //interaction
     this->plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    //bebel
+    this->plot->xAxis2->setVisible(true);
+    this->plot->xAxis2->setTickLabels(false);
+    this->plot->xAxis2->setTicks(false);
+    this->plot->xAxis2->setLabel("A-B");
+    this->plot->xAxis2->setLabelColor(Qt::white);
+    this->plot->yAxis->setLabel("dbm");
+    this->plot->yAxis->setLabelColor(Qt::white);
+    //tick
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
     timeTicker->setTimeFormat("%h:%m:%s");
     this->plot->xAxis->setTicker(timeTicker);
     this->plot->xAxis->ticker()->setTickCount(3);
+    this->plot->xAxis->setBasePen(QPen(Qt::white, 1));
+    this->plot->yAxis->setBasePen(QPen(Qt::white, 1));
+    this->plot->xAxis->setTickPen(QPen(Qt::white, 1));
+    this->plot->yAxis->setTickPen(QPen(Qt::white, 1));
+    this->plot->xAxis->setSubTickPen(QPen(Qt::white, 1));
+    this->plot->yAxis->setSubTickPen(QPen(Qt::white, 1));
+    this->plot->xAxis->setTickLabelColor(Qt::white);
+    this->plot->yAxis->setTickLabelColor(Qt::white);
+    //line
+    this->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
+    this->plot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::black, 1.5), QBrush(Qt::red), 9));
+    this->plot->graph(0)->setPen(QPen(Qt::red));
+    //透明
+    this->plot->setAttribute(Qt::WA_TranslucentBackground);
+    this->plot->setStyleSheet("background:transparent");
+    this->plot->setBackground(QBrush(Qt::NoBrush));
+
+    //----------------------plot2----------------------
+    //interaction
+    this->plot2->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    //bebel
+    this->plot2->xAxis2->setVisible(true);
+    this->plot2->xAxis2->setTickLabels(false);
+    this->plot2->xAxis2->setTicks(false);
+    this->plot2->xAxis2->setLabel("A-C");
+    this->plot2->xAxis2->setLabelColor(Qt::white);
+    this->plot2->yAxis->setLabel("dbm");
+    this->plot2->yAxis->setLabelColor(Qt::white);
+    //tick
+    this->plot2->xAxis->setTicker(timeTicker);
+    this->plot2->xAxis->ticker()->setTickCount(3);
+    this->plot2->xAxis->setBasePen(QPen(Qt::white, 1));
+    this->plot2->yAxis->setBasePen(QPen(Qt::white, 1));
+    this->plot2->xAxis->setTickPen(QPen(Qt::white, 1));
+    this->plot2->yAxis->setTickPen(QPen(Qt::white, 1));
+    this->plot2->xAxis->setSubTickPen(QPen(Qt::white, 1));
+    this->plot2->yAxis->setSubTickPen(QPen(Qt::white, 1));
+    this->plot2->xAxis->setTickLabelColor(Qt::white);
+    this->plot2->yAxis->setTickLabelColor(Qt::white);
+    //line
+    this->plot2->graph(0)->setLineStyle(QCPGraph::lsLine);
+    this->plot2->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::black, 1.5), QBrush(Qt::red), 9));
+    this->plot2->graph(0)->setPen(QPen(Qt::red));
+    //透明
+    this->plot2->setAttribute(Qt::WA_TranslucentBackground);
+    this->plot2->setStyleSheet("background:transparent");
+    this->plot2->setBackground(QBrush(Qt::NoBrush));
+
+    //----------------------plot3----------------------
+    //interaction
+    this->plot3->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    //bebel
+    this->plot3->xAxis2->setVisible(true);
+    this->plot3->xAxis2->setTickLabels(false);
+    this->plot3->xAxis2->setTicks(false);
+    this->plot3->xAxis2->setLabel("B-C");
+    this->plot3->xAxis2->setLabelColor(Qt::white);
+    this->plot3->yAxis->setLabel("dbm");
+    this->plot3->yAxis->setLabelColor(Qt::white);
+    //tick
+    this->plot3->xAxis->setTicker(timeTicker);
+    this->plot3->xAxis->ticker()->setTickCount(3);
+    this->plot3->xAxis->setBasePen(QPen(Qt::white, 1));
+    this->plot3->yAxis->setBasePen(QPen(Qt::white, 1));
+    this->plot3->xAxis->setTickPen(QPen(Qt::white, 1));
+    this->plot3->yAxis->setTickPen(QPen(Qt::white, 1));
+    this->plot3->xAxis->setSubTickPen(QPen(Qt::white, 1));
+    this->plot3->yAxis->setSubTickPen(QPen(Qt::white, 1));
+    this->plot3->xAxis->setTickLabelColor(Qt::white);
+    this->plot3->yAxis->setTickLabelColor(Qt::white);
+    //line
+    this->plot3->graph(0)->setLineStyle(QCPGraph::lsLine);
+    this->plot3->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::black, 1.5), QBrush(Qt::red), 9));
+    this->plot3->graph(0)->setPen(QPen(Qt::red));
+    //透明
+    this->plot3->setAttribute(Qt::WA_TranslucentBackground);
+    this->plot3->setStyleSheet("background:transparent");
+    this->plot3->setBackground(QBrush(Qt::NoBrush));
 }
 
 void MapsViewer::changZoom(int value){
@@ -200,13 +289,19 @@ void MapsViewer::drawWAPs(WAP *waps, const unsigned waps_size, lastDistance *las
             this->plot3Data.realDistance.push_back(lastDist[i].realDistance);
         }
     }
-
     //plot
-    plot->graph(0)->setData(this->plotData.x, this->plotData.y);
-    plot2->graph(0)->setData(this->plot2Data.x, this->plot2Data.y);
-    plot3->graph(0)->setData(this->plot3Data.x, this->plot3Data.y);
+    this->plot->graph(0)->setData(this->plotData.x, this->plotData.y);
+    this->plot2->graph(0)->setData(this->plot2Data.x, this->plot2Data.y);
+    this->plot3->graph(0)->setData(this->plot3Data.x, this->plot3Data.y);
     this->plot->graph(0)->rescaleAxes(false);
+    this->plot2->graph(0)->rescaleAxes(false);
+    this->plot3->graph(0)->rescaleAxes(false);
+    //rpQueuedReplot 可以避免 main form 在 repaint 時，plot 若也在執行 replot 會導致當掉
+    plot->replot(QCustomPlot::rpQueuedReplot);
+    plot2->replot(QCustomPlot::rpQueuedReplot);
+    plot3->replot(QCustomPlot::rpQueuedReplot);
 
+    //main form repaint
     this->isSetting = false;
     this->update();
 }
@@ -381,11 +476,7 @@ void MapsViewer::paintEvent(QPaintEvent *event){
         painter.drawText(standard, this->height()-35,"10(M)");
     else
         painter.drawText(standard, this->height()-35,"10(-dBm)");
-
     painter.end();
-
-    //plot
-    plot->replot();
 }
 
 MapsViewer::~MapsViewer()
