@@ -1,4 +1,4 @@
-# CyberMaps
+# MeshRouter-Maps
 
 Method for realizing indoor positioning using mesh router.
 
